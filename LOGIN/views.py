@@ -48,8 +48,8 @@ class Login(APIView):
         })
 
 class Test(APIView):
-    def get(self,request, *args, **kwargs):
-        return Response("hello")
+    def post(self,request, *args, **kwargs):
+        return Response("hello world")
 # # 主页
 # def index(request, ):
 #     username = request.user
