@@ -46,6 +46,10 @@ class Login(APIView):
             'user_id': user.pk,
             'user_name':user.username,
         })
+
+class Test(APIView):
+    def get(self,request, *args, **kwargs):
+        return Response("hello")
 # # 主页
 # def index(request, ):
 #     username = request.user

@@ -17,8 +17,9 @@ from django.urls import path
 from LOGIN import views
 from django.contrib import admin
 
-urlpatterns = {
-    path('admin/', admin.site.urls),
-    path('api/register/',views.Register.as_view()),
-    path('api/login/',views.Login.as_view()),
-}
+urlpatterns = [
+    path(r'admin/', admin.site.urls),
+    path(r'api/register/',views.Register.as_view()),
+    path(r'api/login/',views.Login.as_view()),
+    path(r'api/test/',views.Test.as_view()),
+]
