@@ -53,7 +53,7 @@ class Test(APIView):
 # # 主页
 # def index(request, ):
 #     username = request.user
-#     return render(request, 'LOGIN/index.html', locals())
+#     return render(request, 'login/index.html', locals())
 #
 #
 # # 登录
@@ -68,7 +68,7 @@ class Test(APIView):
 #             login(request, user=n)
 #             return redirect('/')
 #     # 失败重定向到登录页
-#     return render(request, 'LOGIN/login.html')
+#     return render(request, 'login/login.html')
 #
 #
 # # 注册
@@ -81,7 +81,7 @@ class Test(APIView):
 #         u = User.objects.filter(username=username).first()
 #         if u:
 #             info = '该用户名已被注册'
-#             return render(request, 'LOGIN/ERROR.html', {'info': info})
+#             return render(request, 'login/ERROR.html', {'info': info})
 #         else:
 #             # 注册成功，创建用户
 #             User.objects.create_user(
@@ -91,7 +91,7 @@ class Test(APIView):
 #             # 重定向到登录页面
 #             return HttpResponseRedirect('/tologin/')
 #     # 注册失败，重新注册
-#     return render(request, 'LOGIN/register.html')
+#     return render(request, 'login/register.html')
 #
 #
 # def lagout(request):
