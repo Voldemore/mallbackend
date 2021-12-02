@@ -1,9 +1,10 @@
 
 # Create your views here.
-#from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect
 #from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-#from django.contrib.auth import authenticate, login, logout
+from django.contrib import auth
+from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.models import AnonymousUser
 from rest_framework.authtoken.views import APIView,AuthTokenSerializer
 from rest_framework.authtoken.models import Token
@@ -34,18 +35,22 @@ class Register(APIView):
 
 # 用户登录
 class Login(APIView):
+    def tologin(request):
+        if request.method == 'POST' and request.POST:
+            data = request.POST
+            username = data.get('username')
+            password = data.get('password')
+            #   内置验证
+            #   username = auth.authenticate(username = username, password = password)
 
-    def post(self, request, *args, **kwargs):
-        serializer = AuthTokenSerializer(data=request.data,context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'status':True,
-            'token': token.key,
-            'user_id': user.pk,
-            'user_name':user.username,
-        })
+            n = authenticate(username=username, password=password)
+            if n:
+                # 登陆成功即可获取当前登录用户，返回主页
+                auth.login(request, user=n)
+                return redirect('/login/')
+        # 失败重定向到登录页
+        return render(request, 'login.html')
+
 
 class Test(APIView):
     def post(self,request, *args, **kwargs):
@@ -56,22 +61,12 @@ class Test(APIView):
 #     return render(request, 'login/index.html', locals())
 #
 #
-# # 登录
-# def tologin(request):
-#     if request.method == 'POST' and request.POST:
-#         data = request.POST
-#         username = data.get('username')
-#         password = data.get('password')
-#         n = authenticate(username=username, password=password)
-#         if n:
-#             # 登陆成功即可获取当前登录用户，返回主页
-#             login(request, user=n)
-#             return redirect('/')
-#     # 失败重定向到登录页
-#     return render(request, 'login/login.html')
-#
-#
-# # 注册
+# 登录
+
+def index(request):
+
+
+## 注册
 # def register(request):
 #     if request.method == 'POST' and request.POST:
 #         data = request.POST

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'login',
     'django_rename_app',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +86,7 @@ DATABASES = {
         'PASSWORD': '2021mall',
         'HOST': "127.0.0.1",
         'PORT': '3306',
-
+        'NAME': 'mall'
     }
 }
 
