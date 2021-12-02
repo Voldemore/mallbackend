@@ -14,7 +14,7 @@ from rest_framework.response import Response
 # Create your views here.
 # 用户注册
 class Register(APIView):
-    def post(self,request, *args, **kwargs):
+    def get(self,request, *args, **kwargs):
         username = request.data.get('username')
         password = request.data.get('password')
         if User.objects.filter(username=username).exists():
@@ -38,8 +38,8 @@ class Login(APIView):
     def post(self,request, *args, **kwargs):
         if request.method == 'POST' and request.POST:
             data = request.POST
-            username = request.data.get('username')
-            password = request.data.get('password')
+            username = data.get('username')
+            password = data.get('password')
             print(username)
             print(password)
             #   内置验证
@@ -49,13 +49,15 @@ class Login(APIView):
             if n:
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
-                return redirect('/login/')
+                return
+                #return redirect('/login/')
         # 失败重定向到登录页
-        return render(request, 'login.html')
+        return
+        #return redirect('/login/')
 
 
 class Test(APIView):
-    def post(self,request, *args, **kwargs):
+    def get(self,request, *args, **kwargs):
         return Response("hello world")
 # # 主页
 # def index(request, ):
