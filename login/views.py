@@ -52,6 +52,10 @@ class Login(APIView):
                 #return
                 return redirect('/login/')
         # 失败重定向到登录页
+            #test----------------------------------------------
+            else:
+                return redirect('/test/')
+            #test----------------------------------------------
         #return
         return redirect('/login/')
 
