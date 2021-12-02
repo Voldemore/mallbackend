@@ -35,11 +35,13 @@ class Register(APIView):
 
 # 用户登录
 class Login(APIView):
-    def tologin(request):
+    def post(self,request, *args, **kwargs):
         if request.method == 'POST' and request.POST:
             data = request.POST
-            username = data.get('username')
-            password = data.get('password')
+            username = request.data.get('username')
+            password = request.data.get('password')
+            print(username)
+            print(password)
             #   内置验证
             #   username = auth.authenticate(username = username, password = password)
 
@@ -62,8 +64,6 @@ class Test(APIView):
 #
 #
 # 登录
-
-#def index(request):
 
 
 ## 注册
