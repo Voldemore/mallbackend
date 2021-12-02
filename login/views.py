@@ -63,7 +63,7 @@ class Test(APIView):
 #
 # 登录
 
-def index(request):
+#def index(request):
 
 
 ## 注册
