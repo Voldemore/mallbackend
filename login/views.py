@@ -49,11 +49,11 @@ class Login(APIView):
             if n:
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
-                return
-                #return redirect('/login/')
+                #return
+                return redirect('/login/')
         # 失败重定向到登录页
-        return
-        #return redirect('/login/')
+        #return
+        return redirect('/login/')
 
 
 class Test(APIView):
