@@ -34,7 +34,9 @@ class Register(APIView):
 # 用户登录
 class Login(APIView):
     def post(self,request, *args, **kwargs):
-        if request.method == 'POST' and request.POST:
+        if request.method == 'POST': # and request.POST:
+            print("receive POST request at /login")
+            print(request.POST)
             data = request.POST
             username = data.get('username')
             password = data.get('password')
@@ -48,14 +50,14 @@ class Login(APIView):
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
                 #return
-                return redirect('/login/')
+                return redirect('/api/test/')
         # 失败重定向到登录页
             #test----------------------------------------------
             else:
-                return redirect('/test/')
+                return redirect('/api/test/')
             #test----------------------------------------------
         #return
-        return redirect('/login/')
+        return redirect('/api/test/')
 
 
 class Test(APIView):
