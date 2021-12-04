@@ -9,21 +9,50 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.views import APIView,AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.db import connection
+
 import json
 
 # Create your views here.
 # 用户注册
+#在内置的User中username,定义为email
 class Register(APIView):
     def get(self,request, *args, **kwargs):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        if User.objects.filter(username=username).exists():
+        if request.method == 'GET':
+
+            print("receive GET request at /register")
+            data = json.loads(request.body)
+            email = data.get('email')
+            password = data.get('password')
+            username = data.get('name')
+            mobile = data.get('mobile')
+            province = data.get('province')
+            city = data.get('city')
+            address = data.get('address')
+
+            if User.objects.filter(username=email).exists():
+                resp = {
+                    'id': -1,
+                    'msg': 'Username already exists',
+                    'payload': [],
+                }
+            else:
+                user = User.objects.create_user(username=email, password=password)
+
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                }
+
+
+
+        if User.objects.filter(username=email).exists():
             resp = {
                 'id': -1,
                 'msg': 'Username already exists!'
             }
         else:
-            user = User.objects.create_user(username=username,password=password)
+            user = User.objects.create_user(username=email,password=password)
             token, created = Token.objects.get_or_create(user=user)
             resp = {
                 'id': 0,
@@ -51,7 +80,12 @@ class Login(APIView):
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
                 #return
-                return redirect('/api/test/')
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload':
+                }
+                return Response(resp)
         # 失败重定向到登录页
             #test----------------------------------------------
             else:
