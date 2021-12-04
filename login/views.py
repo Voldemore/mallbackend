@@ -19,17 +19,15 @@ class Register(APIView):
         password = request.data.get('password')
         if User.objects.filter(username=username).exists():
             resp = {
-                'status':False,
-                'data':'用户名已被注册'
+                'id': -1,
+                'msg': 'Username already exists!'
             }
         else:
             user = User.objects.create_user(username=username,password=password)
             token, created = Token.objects.get_or_create(user=user)
             resp = {
-                'status':True,
-                'token': token.key,
-                'user_id': user.pk,
-                'user_name': user.username,
+                'id': 0,
+                'msg': 'Success',
             }
         return Response(resp)
 
