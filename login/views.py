@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.views import APIView,AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+import json
 
 # Create your views here.
 # 用户注册
@@ -34,10 +34,11 @@ class Register(APIView):
 # 用户登录
 class Login(APIView):
     def post(self,request, *args, **kwargs):
-        if request.method == 'POST': # and request.POST:
+        if request.method == 'POST':
             print("receive POST request at /login")
-            print(request.POST)
-            data = request.POST
+            data = json.loads(request.body)
+            print(data)
+
             username = data.get('username')
             password = data.get('password')
             print(username)
