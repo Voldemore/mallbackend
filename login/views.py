@@ -10,17 +10,16 @@ from rest_framework.authtoken.views import APIView,AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.db import connection
-
 import json
 
 # Create your views here.
 # 用户注册
 #在内置的User中username,定义为email
 class Register(APIView):
-    def get(self,request, *args, **kwargs):
-        if request.method == 'GET':
+    def post(self,request, *args, **kwargs):
+        if request.method == 'POST':
 
-            print("receive GET request at /register")
+            print("receive POST request at /register")
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
@@ -38,26 +37,14 @@ class Register(APIView):
                 }
             else:
                 user = User.objects.create_user(username=email, password=password)
+                with connection.cursor() as cur:
+                    cur.execute()
 
                 resp = {
                     'id': 0,
                     'msg': 'Success',
                 }
 
-
-
-        if User.objects.filter(username=email).exists():
-            resp = {
-                'id': -1,
-                'msg': 'Username already exists!'
-            }
-        else:
-            user = User.objects.create_user(username=email,password=password)
-            token, created = Token.objects.get_or_create(user=user)
-            resp = {
-                'id': 0,
-                'msg': 'Success',
-            }
         return Response(resp)
 
 # 用户登录
@@ -89,7 +76,19 @@ class Login(APIView):
         # 失败重定向到登录页
             #test----------------------------------------------
             else:
-                return redirect('/api/test/')
+                resp = {
+                    'id': -1,
+                    'msg': 'username doesnot exist',
+                    'payload':
+                        {
+                            "username": "A",
+                            "mobile": "10.46.233.207",
+                            "province": "D",
+                            "city": "1",
+                            "address": "1"
+                        }
+                }
+                return Response(resp)
             #test----------------------------------------------
         #return
         return redirect('/api/test/')
