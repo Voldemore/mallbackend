@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #add
     'login',
+    'ordermanagement',
     'django_rename_app',
     'rest_framework',
     'rest_framework.authtoken',

@@ -83,7 +83,7 @@ class Login(APIView):
                 resp = {
                     'id': 0,
                     'msg': 'Success',
-                    'payload':
+                    'payload':[]
                 }
                 return Response(resp)
         # 失败重定向到登录页
