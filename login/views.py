@@ -54,36 +54,42 @@ class Login(APIView):
             print("receive POST request at /login")
             data = json.loads(request.body)
             print(data)
-            username = data.get('username')#actually email
+            email = data.get('username')#actually email
             password = data.get('password')
-            print(username)
+            print(email)
             print(password)
             #   内置验证
             #   username = auth.authenticate(username = username, password = password)
 
-            n = authenticate(username=username, password=password)
+            n = authenticate(username=email, password=password)
             print(n)
             if n is not None:
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
-                operation_select = 'select'
+                operation_select = 'select username,mobile,province,city,address from mall1.users where user_id = %s'
+                cursor = connection.cursor()
+                cursor.execute(operation_select,[email])
+                result = cursor.fetchone()
+                dict_res = {'username': result[0], 'mobile': result[1], 'province': result[2], 'city': result[3],
+                            'address': result[4]}
                 # return
                 resp = {
                     'id': 0,
                     'msg': 'Success',
-                    'payload': {
-                        "username": "A",
-                        "mobile": "10.46.233.207",
-                        "province": "D",
-                        "city": "1",
-                        "address": "1"
-                    }
+                    'payload': dict_res
+                    #     {
+                    #     "username": "A",
+                    #     "mobile": "10.46.233.207",
+                    #     "province": "D",
+                    #     "city": "1",
+                    #     "address": "1"
+                    # }
                 }
                 return Response(resp)
             # 失败重定向到登录页
             # test----------------------------------------------
             else:
-                user = User.objects.filter(username=username)
+                user = User.objects.filter(username=email)
 
                 print(user)
 
@@ -96,9 +102,10 @@ class Login(APIView):
                         }
 
                 else:
+
                     resp = {
                         "id": -1,
-                        "msg": "username doesn't exist"
+                        "msg": "username doesn't exist",
                     }
 
                 return Response(resp)
@@ -110,11 +117,11 @@ class Test(APIView):
 
 # sql_insert = 'insert into mall.users(user_id,name,password,email,mobile,province,city) values(%s,%s,%s,%s,%s,%s,%s)'
 # cursor = connection.cursor()
-# cursor.execute(sql_insert, ['000000000000002', 'sy', '12345', '200001@ruc.edu.cn', '13767595949', 'jiangxi', 'gaoan'])
+# # cursor.execute(sql_insert, ['000000000000002', 'sy', '12345', '200001@ruc.edu.cn', '13767595949', 'jiangxi', 'gaoan'])
 # sql_select = 'select * from mall.users'
 # cursor.execute(sql_select)
 # rows = cursor.fetchall()
 # for row in rows:
-#   print(row)
-# cursor.execute()
-# cursor.close()
+#   print(row[0])
+# #cursor.execute()
+# # cursor.close()
