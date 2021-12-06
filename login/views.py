@@ -3,15 +3,14 @@
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
-#from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.views import APIView, AuthTokenSerializer
 #from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
 from django.db import connection
 import json
-from django.utils.decorators import method_decorator
-from django.template.context_processors import csrf
+
 
 
 # Create your views here.
@@ -19,7 +18,7 @@ from django.template.context_processors import csrf
 # 在内置的User中username,定义为email
 
 class Register(APIView):
-    #@csrf_exempt
+
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -100,6 +99,7 @@ class Login(APIView):
                 print(user)
 
                 if len(user) != 0:
+                    user = User.objects.get(username=email)
                     pwd = user.password
                     if check_password(password, pwd) is False:
                         resp = {
