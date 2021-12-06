@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #add
     'login',
-    'ordermanagement',
+    'order_management',
     'django_rename_app',
     'rest_framework',
     'rest_framework.authtoken',
+    'goods_management',
 ]
 
 MIDDLEWARE = [
