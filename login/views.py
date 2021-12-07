@@ -1,4 +1,5 @@
 # Create your views here.
+import datetime
 
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -75,8 +76,9 @@ class Login(APIView):
                 cursor = connection.cursor()
                 cursor.execute(operation_select,[email])
                 result = cursor.fetchone()
-                dict_res = {'username': result[0], 'mobile': result[1], 'province': result[2], 'city': result[3],
-                            'address': result[4]}
+
+                dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1], 'province': result[2], 'city': result[3],
+                            'address': result[4], }
                 # return
                 resp = {
                     'id': 0,
