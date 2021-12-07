@@ -45,9 +45,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'goods_management',
+    'corsheaders',
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     #'django.middleware.csrf.CsrfResponseMiddleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,6 +64,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
+
+#
+#
+
 
 ROOT_URLCONF = 'mallbackend.urls'
 
