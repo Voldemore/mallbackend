@@ -22,4 +22,5 @@ urlpatterns = [
     path(r'api/register/',views.Register.as_view()),
     path(r'api/login/',views.Login.as_view()),
     path(r'api/test/',views.Test.as_view()),
+#    path(r'api/goodsdetail'),views.
 ]
