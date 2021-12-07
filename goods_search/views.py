@@ -13,3 +13,9 @@ from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
 from django.db import connection
 import json
+
+
+
+class Test(APIView):
+    def get(self, request, *args, **kwargs):
+        return Response("小笨蛋")

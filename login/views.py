@@ -41,9 +41,9 @@ class Register(APIView):
                 }
             else:
                 user = User.objects.create_user(username=email, password=password)
-                operation_insert = 'insert into mall1.users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall1.users(user_id,username,password,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s,%s)'
                 cursor = connection.cursor()
-                cursor.execute(operation_insert, [email, username, mobile, province, city, address])
+                cursor.execute(operation_insert, [email, username, password, mobile, province, city, address])
                 resp = {
                     'id': 0,
                     'msg': 'Success',

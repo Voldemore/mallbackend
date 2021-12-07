@@ -16,6 +16,7 @@ Including another URLconf
 from django.urls import path, include
 #from goods_search import views
 from login import views
+#两个from为什么不能同时实现
 from django.contrib import admin
 
 
