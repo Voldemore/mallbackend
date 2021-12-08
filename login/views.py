@@ -24,6 +24,7 @@ class Register(APIView):
         if request.method == 'POST':
 
             print("receive POST request at /register")
+
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
