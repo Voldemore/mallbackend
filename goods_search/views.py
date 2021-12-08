@@ -16,7 +16,7 @@ import json
 
 
 class GoodsSearch(APIView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if request.method == 'GET':
             print("receive GET request at /goods_search")
             data = request.GET
