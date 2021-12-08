@@ -23,14 +23,14 @@ class order_inquiry(APIView):
                 resp = {
                         'id': 0,
                         'msg': 'Success',
-                        'payload': {
+                        'payload': [{
                             "order_id": "订单号",
                             "mer_name": "店铺名",
                             "goods_name": "商品名",
-                            "image": "商品图片src",
+                            "image": "",
                             "num": "购买数量",
                             "amount": "金额"
-                        }
+                        }]
                     }
                 return Response(resp)
             #else:
