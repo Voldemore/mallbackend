@@ -25,8 +25,8 @@ class GoodsSearch(APIView):
 
             print(goods_id)
             print(mer_id)
-
-            if User.objects.filter(username=user_id).exists():
+'''
+            if mer_id.filter(username=user_id).exists():
                 print("1")
                 # inquiry_sql = 'select order_id,mer_id,goods_id,city,address from mall1.orderitem where user_id = %s'
                 resp = {
@@ -46,7 +46,7 @@ class GoodsSearch(APIView):
             #写到这儿了，表mergoods需要加上这些元素，这个表专门服务goodssearch最好
 
             #下面都不是
-
+'''
 
 class Test(APIView):
     def get(self, request, *args, **kwargs):
