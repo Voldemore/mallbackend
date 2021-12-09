@@ -56,7 +56,7 @@ class Register(APIView):
 class Login(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            print("receive POST request at /login_customer")
+            print("receive POST request at /customer/login")
             data = json.loads(request.body)
             print(data)
             email = data.get('username')  # actually email
@@ -64,34 +64,35 @@ class Login(APIView):
             print(email)
             print(password)
             #   内置验证
-            #   username = auth.authenticate(username = username, password = password)
 
             n = authenticate(username=email, password=password)
             print(n)
             if n is not None:
                 # 登陆成功即可获取当前登录用户，返回主页
                 auth.login(request, user=n)
-                operation_select = 'select username,mobile,province,city,address from mall1.users where user_id = %s'
-                cursor = connection.cursor()
-                cursor.execute(operation_select, [email])
-                result = cursor.fetchone()
+                user = User.objects.get(username=email)
+                staff_state = user.is_staff
+                if staff_state == 0:
+                    operation_select = 'select username,mobile,province,city,address from mall1.users where user_id = %s'
+                    cursor = connection.cursor()
+                    cursor.execute(operation_select, [email])
+                    result = cursor.fetchone()
 
-                dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
-                            'province': result[2], 'city': result[3],
-                            'address': result[4], }
-                # return
-                resp = {
-                    'id': 0,
-                    'msg': 'Success',
-                    'payload': dict_res
-                    #     {
-                    #     "username": "A",
-                    #     "mobile": "10.46.233.207",
-                    #     "province": "D",
-                    #     "city": "1",
-                    #     "address": "1"
-                    # }
-                }
+                    dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
+                                'province': result[2], 'city': result[3],
+                                'address': result[4], }
+                    # return
+                    resp = {
+                        'id': 0,
+                        'msg': 'Success',
+                        'payload': dict_res
+                    }
+                else:
+                    resp = {
+                        "id": -1,
+                        "msg": "username doesn't exist",
+                    }
+
                 return Response(resp)
             # 失败重定向到登录页
             # test----------------------------------------------
@@ -103,10 +104,16 @@ class Login(APIView):
                 if len(user) != 0:
                     user = User.objects.get(username=email)
                     pwd = user.password
-                    if check_password(password, pwd) is False:
+                    staff_state = user.is_staff
+                    if (check_password(password, pwd) is False) and (staff_state==0):
                         resp = {
                             "id": -2,
                             "msg": "password incorrect"
+                        }
+                    else:
+                        resp = {
+                            "id": -1,
+                            "msg": "username doesn't exist",
                         }
 
                 else:

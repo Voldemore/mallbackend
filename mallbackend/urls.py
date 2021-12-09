@@ -20,9 +20,7 @@ from django.contrib import admin
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
-    path(r'api/register/',views.Register.as_view()),
-    path(r'api/login_customer/',views.Login.as_view()),
-    path(r'api/test/',views.Test.as_view()),
+    path(r'api/customer/',include('login_customer.urls')),
     path(r'api/orders/', include('order_search.urls')),
     path(r'api/goods_search/', include('goods_search.urls')),
     path(r'api/merchant/',include('login_merchant.urls'))

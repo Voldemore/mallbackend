@@ -1,1 +1,8 @@
 #python manage.py runserver 0.0.0.0:8000
+from django.urls import path
+from login_customer import views
+
+urlpatterns = [
+    path(r'register/', views.Register.as_view()),
+    path(r'login/', views.Login.as_view())
+]
