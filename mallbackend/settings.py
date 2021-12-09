@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #add
     'login_customer',
+    'login_merchant'
     'order_search',
     'django_rename_app',
     'rest_framework',

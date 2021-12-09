@@ -24,5 +24,6 @@ urlpatterns = [
     path(r'api/login_customer/',views.Login.as_view()),
     path(r'api/test/',views.Test.as_view()),
     path(r'api/orders/', include('order_search.urls')),
-    path(r'api/goods_search/', include('goods_search.urls'))
+    path(r'api/goods_search/', include('goods_search.urls')),
+    path(r'api/merchant/',include('login_merchant.urls'))
 ]
