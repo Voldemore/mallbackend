@@ -13,7 +13,6 @@ from django.db import connection
 import json
 
 
-
 # Create your views here.
 # 用户注册
 # 在内置的User中username,定义为email
@@ -40,7 +39,7 @@ class Register(APIView):
                     'msg': 'Username already exists',
                 }
             else:
-                user = User.objects.create_user(username=email, password=password)
+                user = User.objects.create_user(username=email, password=password, is_staff=0)
                 operation_insert = 'insert into mall1.users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
                 cursor = connection.cursor()
                 cursor.execute(operation_insert, [email, username, mobile, province, city, address])
@@ -57,10 +56,10 @@ class Register(APIView):
 class Login(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            print("receive POST request at /login")
+            print("receive POST request at /login_customer")
             data = json.loads(request.body)
             print(data)
-            email = data.get('username')#actually email
+            email = data.get('username')  # actually email
             password = data.get('password')
             print(email)
             print(password)
@@ -74,10 +73,11 @@ class Login(APIView):
                 auth.login(request, user=n)
                 operation_select = 'select username,mobile,province,city,address from mall1.users where user_id = %s'
                 cursor = connection.cursor()
-                cursor.execute(operation_select,[email])
+                cursor.execute(operation_select, [email])
                 result = cursor.fetchone()
 
-                dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1], 'province': result[2], 'city': result[3],
+                dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
+                            'province': result[2], 'city': result[3],
                             'address': result[4], }
                 # return
                 resp = {
