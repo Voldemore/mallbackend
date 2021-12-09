@@ -32,6 +32,7 @@ class order_inquiry(APIView):
                             "amount": "金额"
                         }]
                     }
+
                 return Response(resp)
             #else:
                 #inquiry_sql = 'select'
