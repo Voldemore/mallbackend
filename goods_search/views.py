@@ -24,20 +24,33 @@ class GoodsSearch(APIView):
 
             print(type)
 
-            operation_select = 'select goods_id,des,maker,unit,type,image,goods_name from mall1.goods where type = %s'
+            # operation_select = 'select goods_id,des,maker,unit,type,image,goods_name from mall1.goods where type = %s'
+            # cursor = connection.cursor()
+            # cursor.execute(operation_select, [type])
+            # result = cursor.fetchone()
+            #
+            # dict_res = {
+            #     'time': datetime.datetime.now(),
+            #     'goods_id': result[0],
+            #     'des': result[1],
+            #     'maker': result[2],
+            #     'unit': result[3],
+            #     'type': result[4],
+            #     'image': result[5],
+            #     'goods_name': result[6]
+            # }
+
+            operation_select = 'select goods_id,maker,image,goods_name from mall1.goods where type = %s'
             cursor = connection.cursor()
             cursor.execute(operation_select, [type])
             result = cursor.fetchone()
 
             dict_res = {
-                'time': datetime.datetime.now(),
+                #'time': datetime.datetime.now(),
                 'goods_id': result[0],
-                'des': result[1],
-                'maker': result[2],
-                'unit': result[3],
-                'type': result[4],
-                'image': result[5],
-                'goods_name': result[6]
+                'maker': result[1],
+                'image': result[2],
+                'goods_name': result[3]
             }
 
             resp = {
