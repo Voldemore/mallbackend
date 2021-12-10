@@ -20,13 +20,14 @@ class GoodsSearch(APIView):
         if request.method == 'GET':
             print("receive GET request at /goods_search")
             data = request.GET
+            #data = json.loads(request.body)
+            print(data)
             goods_id = data.get('goods_id')
             mer_id = data.get('mer_id')
-
             print(goods_id)
             print(mer_id)
-'''
-            if mer_id.filter(username=user_id).exists():
+
+            if mergoods.objects.filter(username=user_id).exists():
                 print("1")
                 # inquiry_sql = 'select order_id,mer_id,goods_id,city,address from mall1.orderitem where user_id = %s'
                 resp = {
@@ -51,3 +52,4 @@ class GoodsSearch(APIView):
 class Test(APIView):
     def get(self, request, *args, **kwargs):
         return Response("困！")
+'''

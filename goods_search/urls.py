@@ -2,6 +2,6 @@ from django.urls import path, include, re_path
 from goods_search import views
 
 urlpatterns = [
-    path(r'goods_search/',views.GoodsSearch.as_view())
+    path(r'detail/',views.GoodsSearch.as_view())
 
 ]
