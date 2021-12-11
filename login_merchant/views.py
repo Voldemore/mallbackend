@@ -25,6 +25,7 @@ class Register(APIView):
         if request.method == 'POST':
 
             print("receive POST request at /merchant/register")
+            #handle the request
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
@@ -41,9 +42,9 @@ class Register(APIView):
                 }
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=1)
-                operation_insert = 'insert into mall1.merchant(mer_id,name,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall1.view_merchant_users(mer_id,name,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
                 cursor = connection.cursor()
-                cursor.execute(operation_insert, [email, username, mobile, province, city, address])
+                cursor.execute(operation_insert, (email, username, mobile, province, city, address))
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -75,7 +76,7 @@ class Login(APIView):
                 user = User.objects.get(username=email)
                 staff_state = user.is_staff
                 if staff_state==1:
-                    operation_select = 'select name,mobile,province,city,address from mall1.merchant where mer_id = %s'
+                    operation_select = "select name,mobile,province,city,address from mall1.view_merchant_users where mer_id = %s"
                     cursor = connection.cursor()
                     cursor.execute(operation_select, [email])
                     result = cursor.fetchone()

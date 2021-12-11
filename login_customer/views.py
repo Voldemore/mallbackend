@@ -32,6 +32,7 @@ class Register(APIView):
             province = data.get('province')
             city = data.get('city')
             address = data.get('address')
+            print(data)
 
             if User.objects.filter(username=email).exists():
                 resp = {
@@ -40,9 +41,9 @@ class Register(APIView):
                 }
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
-                operation_insert = 'insert into mall1.users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall1.view_customer_users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
                 cursor = connection.cursor()
-                cursor.execute(operation_insert, [email, username, mobile, province, city, address])
+                cursor.execute(operation_insert, (email, username, mobile, province, city, address))
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -73,7 +74,7 @@ class Login(APIView):
                 user = User.objects.get(username=email)
                 staff_state = user.is_staff
                 if staff_state == 0:
-                    operation_select = 'select username,mobile,province,city,address from mall1.users where user_id = %s'
+                    operation_select = 'select username,mobile,province,city,address from mall1.view_customer_users where user_id = %s'
                     cursor = connection.cursor()
                     cursor.execute(operation_select, [email])
                     result = cursor.fetchone()
