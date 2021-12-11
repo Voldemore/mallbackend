@@ -16,15 +16,51 @@ import json
 
 
 class GoodsSearch(APIView):
-    def get(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            print("receive GET request at /goods_search")
-            data = request.GET
-            goods_id = data.get('goods_id')
-            mer_id = data.get('mer_id')
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            print("receive POST request at /goods_search/goods_search")
+            data = json.loads(request.body)
+            type = data.get('type')
 
-            print(goods_id)
-            print(mer_id)
+            print(type)
+
+            # operation_select = 'select goods_id,des,maker,unit,type,image,goods_name from mall1.goods where type = %s'
+            # cursor = connection.cursor()
+            # cursor.execute(operation_select, [type])
+            # result = cursor.fetchone()
+            #
+            # dict_res = {
+            #     'time': datetime.datetime.now(),
+            #     'goods_id': result[0],
+            #     'des': result[1],
+            #     'maker': result[2],
+            #     'unit': result[3],
+            #     'type': result[4],
+            #     'image': result[5],
+            #     'goods_name': result[6]
+            # }
+
+            operation_select = 'select goods_id,maker,image,goods_name from mall1.goods where type = %s'
+            cursor = connection.cursor()
+            cursor.execute(operation_select, [type])
+            result = cursor.fetchone()
+
+            dict_res = {
+                #'time': datetime.datetime.now(),
+                'goods_id': result[0],
+                'maker': result[1],
+                'image': result[2],
+                'goods_name': result[3]
+            }
+
+            resp = {
+                'id': 0,
+                'msg': 'Success',
+                'payload': dict_res
+            }
+
+            return Response(resp)
+
 '''
             if mer_id.filter(username=user_id).exists():
                 print("1")
