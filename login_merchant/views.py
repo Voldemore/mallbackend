@@ -37,7 +37,7 @@ class Register(APIView):
             county = data.get('county')
             address = data.get('address')
 
-            if User.objects.filter(username=email).exists():
+            if User.objects.filter(username=email).exist():
                 resp = {
                     'id': -1,
                     'msg': 'Username already exists',
