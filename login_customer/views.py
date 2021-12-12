@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
 from django.db import connection
 import json
+from SQL_connection.sqlhelper import SqlHelper
 
 
 
@@ -23,7 +24,6 @@ class Register(APIView):
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-
             print("receive POST request at /register")
 
             data = json.loads(request.body)
@@ -44,20 +44,23 @@ class Register(APIView):
                 }
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
+                obj = SqlHelper()
+
                 operation_insert = 'insert into mall1.view_customer_users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
-                cursor = connection.cursor()
-                cursor.execute(operation_insert, [email, username, mobile, province, city, address,])
+                obj.modify(operation_insert,[email, username, mobile, province, city, address,])
+                obj.close()
                 resp = {
                     'id': 0,
                     'msg': 'Success',
                 }
-                cursor.close()
+
 
         return Response(resp)
 
 
 # 用户登录
 class Login(APIView):
+
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             print("receive POST request at /customer/login")
@@ -78,19 +81,15 @@ class Login(APIView):
                 staff_state = user.is_staff
                 if staff_state == 0:
                     operation_select = 'select username,mobile,province,city,address from mall1.view_customer_users where user_id = %s'
-                    cursor = connection.cursor()
-                    cursor.execute(operation_select, [email,])
-                    result = cursor.fetchone()
-                    print(result)
-
-                    dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
-                                'province': result[2], 'city': result[3],
-                                'address': result[4], }
+                    obj = SqlHelper()
+                    result = obj.get_one(operation_select, [email,])
+                    result['time'] = datetime.datetime.now()
+                    obj.close()
                     # return
                     resp = {
                         'id': 0,
                         'msg': 'Success',
-                        'payload': dict_res
+                        'payload': result
                     }
                 else:
                     resp = {
@@ -131,17 +130,3 @@ class Login(APIView):
                 return Response(resp)
 
 
-class Test(APIView):
-    def get(self, request, *args, **kwargs):
-        return Response("hello world")
-
-# sql_insert = 'insert into mall.users(user_id,name,password,email,mobile,province,city) values(%s,%s,%s,%s,%s,%s,%s)'
-# cursor = connection.cursor()
-# # cursor.execute(sql_insert, ['000000000000002', 'sy', '12345', '200001@ruc.edu.cn', '13767595949', 'jiangxi', 'gaoan'])
-# sql_select = 'select * from mall.users'
-# cursor.execute(sql_select)
-# rows = cursor.fetchall()
-# for row in rows:
-#   print(row[0])
-# #cursor.execute()
-# # cursor.close()
