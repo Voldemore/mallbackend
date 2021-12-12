@@ -78,7 +78,7 @@ class Login(APIView):
                     operation_select = 'select username,mobile,province,city,county,address from mall.view_customer_users where user_id = %s'
                     obj = SqlHelper()
                     result = obj.get_one(operation_select, [email, ])
-                    result['time'] = datetime.datetime.now()
+                    #result['time'] = datetime.datetime.now()
                     obj.close()
                     # return
                     resp = {

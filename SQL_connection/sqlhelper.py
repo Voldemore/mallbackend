@@ -3,7 +3,7 @@ import pymysql
 class SqlHelper(object):
 
     def __init__(self):
-        self.conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall1')
+        self.conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
         self.cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
 
     # 获取多个
