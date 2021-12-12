@@ -42,7 +42,7 @@ class Register(APIView):
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
                 obj = SqlHelper()
 
-                operation_insert = 'insert into mall.view_customer_users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall.users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
                 obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
                 obj.close()
                 resp = {

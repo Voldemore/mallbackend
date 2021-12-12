@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 # Create your views here.
 import datetime
-
+import pymysql
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
@@ -26,7 +26,7 @@ class Register(APIView):
         if request.method == 'POST':
 
             print("receive POST request at /merchant/register")
-            #handle the request
+            # handle the request
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
@@ -45,7 +45,7 @@ class Register(APIView):
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=1)
                 obj = SqlHelper()
-                operation_insert = 'insert into mall.view_merchant_users(mer_id,name,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall.merchant(mer_id,name,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
 
                 obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
                 resp = {
@@ -79,7 +79,7 @@ class Login(APIView):
                 if staff_state == 1:
                     operation_select = "select name,mobile,province,city,county,address from mall.view_merchant_users where mer_id = %s"
                     obj = SqlHelper()
-                    result = obj.get_one(operation_select, [email,])
+                    result = obj.get_one(operation_select, [email, ])
                     obj.close()
                     result['time'] = datetime.datetime.now()
 
@@ -125,5 +125,80 @@ class Login(APIView):
                     }
 
                 return Response(resp)
+
+
+# 获取商家信息
+class Merchant_Info(APIView):
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /merchant_info")
+            data = request.GET  # 处理请求
+            mer_id = int(data.get('mername'))
+            print(mer_id)
+            user = User.objects.filter(username=mer_id)
+            if user is not None:
+                user = User.objects.get(username=mer_id)
+                if user.is_staff == 1:
+                    obj = SqlHelper()
+                    sql_select = 'select mer_id,name,mobile,province,city,county,address from mall.view_merchant_users where mer_id = %s'
+                    result = obj.get_one(sql_select, [mer_id, ])
+                    result['time'] = datetime.datetime.now()
+                    obj.close()
+                    resp = {
+                        'id': 0,
+                        'msg': 'success',
+                        'payload': result
+                    }
+                else:
+                    resp = {
+                        'id': -1,
+                        'msg': "the merchant id doesn't exist"
+                    }
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': "the merchant id doesn't exist"
+                }
+            return Response(resp)
+
+class Goods_Bill(APIView):
+    def get(self,request,*args,**kargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /bill_of_goods")
+            data = request.GET  # 处理请求
+            mer_id = int(data.get('merID'))
+            print(mer_id)
+            user = User.objects.filter(username=mer_id)
+            if user is not None:
+                user = User.objects.get(username=mer_id)
+                if user.is_staff == 1:
+                    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+                    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+                    sql_create_view = "create view view_mergoods as select goods_id,price,sales,stock from mergoods where mer_id = %s"
+                    cursor.execute(sql_create_view, [mer_id, ])
+                    sql_select = "select view_goods_info.goods_id,view_goods_info.goods_name,view_goods_info.image,view_mergoods.price,view_mergoods.sales,view_mergoods.stock from view_goods_info,view_mergoods where view_goods_info.goods_id = view_mergoods"
+                    cursor.execute(sql_select)
+                    result_list = cursor.fetchall()
+                    sql_drop = 'drop view view_mergoods'
+                    cursor.execute(sql_drop)
+                    cursor.close()
+                    conn.close()
+                    resp = {
+                        'id': 0,
+                        'msg': 'success',
+                        'payload': result_list
+                    }
+                else:
+                    resp = {
+                        'id': -1,
+                        'msg': "the merchant id doesn't exist"
+                    }
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': "the merchant id doesn't exist"
+                }
+            return Response(resp)
+
 
 

@@ -10,19 +10,20 @@ from rest_framework.response import Response
 from SQL_connection.sqlhelper import SqlHelper
 import pymysql
 
+
 class order_inquiry(APIView):
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET':#要求使用GET请求方式
+        if request.method == 'GET':  # 要求使用GET请求方式
             print("receive GET request at /order_inquiry")
 
-            data = request.GET#处理请求
+            data = request.GET  # 处理请求
             user_id = data.get('user_id')
             print(user_id)
             if User.objects.filter(username=user_id).exists():
                 user = User.objects.get(username=user_id)
 
                 if user.is_staff == 0:
-                    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall1')
+                    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
                     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
                     sql_create_view = "create view view_order(order_id,mer_id,goods_id,num,amount,state,add_time) as select order_id,mer_id,goods_id,num,amount,state,add_time from mall.orderitem where user_id = %s"
@@ -35,10 +36,10 @@ class order_inquiry(APIView):
                     cursor.close()
                     conn.close()
                     resp = {
-                            'id': 0,
-                            'msg': 'Success',
-                            'payload': result_list
-                        }
+                        'id': 0,
+                        'msg': 'Success',
+                        'payload': result_list
+                    }
                 else:
                     resp = {
                         'id': -1,
@@ -51,17 +52,18 @@ class order_inquiry(APIView):
                 }
             return Response(resp)
 
+
 class order_details(APIView):
-    def get(self,request,*args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
-            print("receive GET request at /order_inquiry")
+            print("receive GET request at /order_details")
 
             data = request.GET  # 处理请求
-            order_id = int(data.get('user_id'))
+            order_id = int(data.get('order_id'))
             print(order_id)
             sql_select1 = 'select add_time,comments,addr_id from mall.orderitem where order_id = %s'
             obj = SqlHelper()
-            result1 = obj.get_one(sql_select1,[order_id, ])
+            result1 = obj.get_one(sql_select1, [order_id, ])
             address_id = result1['addr_id']
             if address_id is not None:
                 sql_select2 = "select name,mobile,province,city,county,address from mall.address where addr_id = %s"
@@ -83,6 +85,3 @@ class order_details(APIView):
                     'msg': "The order_id doesn't exist"
                 }
             return Response(resp)
-
-
-
