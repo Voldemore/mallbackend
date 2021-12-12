@@ -11,10 +11,10 @@ from rest_framework.response import Response
 
 class order_inquiry(APIView):
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET':
+        if request.method == 'GET':#要求使用GET请求方式
             print("receive GET request at /order_inquiry")
 
-            data = request.GET
+            data = request.GET#处理请求
             user_id = data.get('user_id')
             print(user_id)
             if User.objects.filter(username=user_id).exists():
@@ -36,4 +36,7 @@ class order_inquiry(APIView):
                 return Response(resp)
             #else:
                 #inquiry_sql = 'select'
+class order_details(APIView):
+    def get(self,request,*args, **kwargs):
+        pass
 

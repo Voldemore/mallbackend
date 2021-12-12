@@ -13,6 +13,8 @@ from django.db import connection
 import json
 
 
+
+
 # Create your views here.
 # 用户注册
 # 在内置的User中username,定义为email
@@ -31,6 +33,7 @@ class Register(APIView):
             mobile = data.get('mobile')
             province = data.get('province')
             city = data.get('city')
+            county = data.get('county')
             address = data.get('address')
             print(data)
 
@@ -43,7 +46,7 @@ class Register(APIView):
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
                 operation_insert = 'insert into mall1.view_customer_users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
                 cursor = connection.cursor()
-                cursor.execute(operation_insert, (email, username, mobile, province, city, address))
+                cursor.execute(operation_insert, [email, username, mobile, province, city, address,])
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -76,7 +79,7 @@ class Login(APIView):
                 if staff_state == 0:
                     operation_select = 'select username,mobile,province,city,address from mall1.view_customer_users where user_id = %s'
                     cursor = connection.cursor()
-                    cursor.execute(operation_select, [email])
+                    cursor.execute(operation_select, [email,])
                     result = cursor.fetchone()
 
                     dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
