@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'goods_management',
     'goods_search',
+    'cart',
+
 
 ]
 REST_FRAMEWORK = {
