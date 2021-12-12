@@ -25,12 +25,12 @@ class order_inquiry(APIView):
                     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall1')
                     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
-                    sql_create_view = "create view View_order(order_id,mer_id,goods_id,num,amount,state,add_time) as select order_id,mer_id,goods_id,num,amount,state,add_time from mall.orderitem where user_id = %s"
-                    cursor.execute(sql_create_view,[user_id,])
-                    sql_select = "select View_order.order_id,merchant_info.mer_name,goods_info.goods_name,goods_info.image,View_order.num,View_order.amount,View_order.state,View_order.add_time from mall.View_order View_order,mall.View_merchant_info merchant_info,mall.View_goods_info goods_info where View_order.goods_id = goods_info.goods_id and View_order.mer_id = merchant_info.mer_id"
+                    sql_create_view = "create view view_order(order_id,mer_id,goods_id,num,amount,state,add_time) as select order_id,mer_id,goods_id,num,amount,state,add_time from mall.orderitem where user_id = %s"
+                    cursor.execute(sql_create_view, [user_id, ])
+                    sql_select = "select view_order.order_id,merchant_info.mer_name,goods_info.goods_name,goods_info.image,view_order.num,view_order.amount,view_order.state,view_order.add_time from view_order,mall.view_merchant_info merchant_info,mall.view_goods_info goods_info where view_order.goods_id = goods_info.goods_id and view_order.mer_id = merchant_info.mer_id"
                     cursor.execute(sql_select)
                     result_list = cursor.fetchall()
-                    sql_drop_view = "drop view mall.View_order"
+                    sql_drop_view = "drop view view_order"
                     cursor.execute(sql_drop_view)
                     cursor.close()
                     conn.close()
