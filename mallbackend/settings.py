@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'mallbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mall1',
+        'NAME': 'mall',
         'USER': 'root',
         'PASSWORD': '2021mall',
         'HOST': "127.0.0.1",

@@ -34,6 +34,7 @@ class Register(APIView):
             mobile = data.get('mobile')
             province = data.get('province')
             city = data.get('city')
+            county = data.get('county')
             address = data.get('address')
 
             if User.objects.filter(username=email).exists():
@@ -44,9 +45,9 @@ class Register(APIView):
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=1)
                 obj = SqlHelper()
-                operation_insert = 'insert into mall1.view_merchant_users(mer_id,name,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
+                operation_insert = 'insert into mall.view_merchant_users(mer_id,name,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
 
-                obj.modify(operation_insert, [email, username, mobile, province, city, address,])
+                obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -75,8 +76,8 @@ class Login(APIView):
                 auth.login(request, user=n)
                 user = User.objects.get(username=email)
                 staff_state = user.is_staff
-                if staff_state==1:
-                    operation_select = "select name,mobile,province,city,address from mall1.view_merchant_users where mer_id = %s"
+                if staff_state == 1:
+                    operation_select = "select name,mobile,province,city,county,address from mall.view_merchant_users where mer_id = %s"
                     obj = SqlHelper()
                     result = obj.get_one(operation_select, [email,])
                     obj.close()
@@ -98,7 +99,7 @@ class Login(APIView):
             # 失败重定向到登录页
             # test----------------------------------------------
             else:
-                user=User.objects.filter(username=email)
+                user = User.objects.filter(username=email)
 
                 if len(user) != 0:
                     user = User.objects.get(username=email)

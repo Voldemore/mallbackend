@@ -4,16 +4,12 @@ import datetime
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.views import APIView, AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
-from django.db import connection
 import json
 from SQL_connection.sqlhelper import SqlHelper
-
-
 
 
 # Create your views here.
@@ -46,14 +42,13 @@ class Register(APIView):
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
                 obj = SqlHelper()
 
-                operation_insert = 'insert into mall1.view_customer_users(user_id,username,mobile,province,city,address) values(%s,%s,%s,%s,%s,%s)'
-                obj.modify(operation_insert,[email, username, mobile, province, city, address,])
+                operation_insert = 'insert into mall.view_customer_users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
+                obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
                 obj.close()
                 resp = {
                     'id': 0,
                     'msg': 'Success',
                 }
-
 
         return Response(resp)
 
@@ -80,9 +75,9 @@ class Login(APIView):
                 user = User.objects.get(username=email)
                 staff_state = user.is_staff
                 if staff_state == 0:
-                    operation_select = 'select username,mobile,province,city,address from mall1.view_customer_users where user_id = %s'
+                    operation_select = 'select username,mobile,province,city,county,address from mall.view_customer_users where user_id = %s'
                     obj = SqlHelper()
-                    result = obj.get_one(operation_select, [email,])
+                    result = obj.get_one(operation_select, [email, ])
                     result['time'] = datetime.datetime.now()
                     obj.close()
                     # return
@@ -109,7 +104,7 @@ class Login(APIView):
                     user = User.objects.get(username=email)
                     pwd = user.password
                     staff_state = user.is_staff
-                    if (check_password(password, pwd) is False) and (staff_state==0):
+                    if (check_password(password, pwd) is False) and (staff_state == 0):
                         resp = {
                             "id": -2,
                             "msg": "password incorrect"
@@ -128,5 +123,3 @@ class Login(APIView):
                     }
 
                 return Response(resp)
-
-
