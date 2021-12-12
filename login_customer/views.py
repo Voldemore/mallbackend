@@ -81,6 +81,7 @@ class Login(APIView):
                     cursor = connection.cursor()
                     cursor.execute(operation_select, [email,])
                     result = cursor.fetchone()
+                    print(result)
 
                     dict_res = {'time': datetime.datetime.now(), 'username': result[0], 'mobile': result[1],
                                 'province': result[2], 'city': result[3],
