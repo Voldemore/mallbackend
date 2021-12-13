@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from SQL_connection.sqlhelper import SqlHelper
 import pymysql
+import json
 
 
 class order_inquiry(APIView):
@@ -85,3 +86,52 @@ class order_details(APIView):
                     'msg': "The order_id doesn't exist"
                 }
             return Response(resp)
+
+
+class order_state(APIView):
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            order_id = int(data.get('order_id'))
+            print(order_id)
+            sql_select = 'select order_id from mall.orderitem where order_id = %s'
+            obj = SqlHelper()
+            result = obj.get_one(sql_select, [order_id, ])
+            if len(result) != 0:
+                sql_update = "update mall.orderitem set state=1 where order_id = %s"
+                obj.modify(sql_update, [order_id, ])
+                obj.close()
+                resp = {
+                    "id": 0,
+                    "msg": "success"
+                }
+            else:
+                resp = {
+                    "id": -1,
+                    "msg": "order not found"
+                }
+            return Response(resp)
+
+
+class comments_release(APIView):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        order_id = int(data.get('order_id'))
+        comments = data.get('comments')
+        sql_select = 'select order_id from mall.orderitem where order_id = %s'
+        obj = SqlHelper()
+        result = obj.get_one(sql_select, [order_id, ])
+        if len(result) != 0:
+            sql_update = "update mall.orderitem set comments=%s where order_id = %s"
+            obj.modify(sql_update, [comments, order_id, ])
+            obj.close()
+            resp = {
+                "id": 0,
+                "msg": "success"
+            }
+        else:
+            resp = {
+                "id": -1,
+                "msg": "order not found"
+            }
+        return Response(resp)
