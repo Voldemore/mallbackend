@@ -3,63 +3,71 @@ from django.shortcuts import render
 # Create your views here.
 import datetime
 
-from django.contrib.auth.models import User
-from django.contrib import auth
-from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.views import APIView, AuthTokenSerializer
-#from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from django.contrib.auth.hashers import check_password
 from django.db import connection
 import json
+import pymysql
+from SQL_connection.sqlhelper import SqlHelper
 
 
 class GoodsSearch(APIView):
-    def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':
             print("receive POST request at /goods_search/goods_search")
-            data = json.loads(request.body)
-            type = data.get('type')
+            data = request.GET
+            variety = data.get('variety')
+            print(variety)
 
-            print(type)
-
-            # operation_select = 'select goods_id,des,maker,unit,type,image,goods_name from mall1.goods where type = %s'
-            # cursor = connection.cursor()
-            # cursor.execute(operation_select, [type])
-            # result = cursor.fetchone()
-            #
-            # dict_res = {
-            #     'time': datetime.datetime.now(),
-            #     'goods_id': result[0],
-            #     'des': result[1],
-            #     'maker': result[2],
-            #     'unit': result[3],
-            #     'type': result[4],
-            #     'image': result[5],
-            #     'goods_name': result[6]
-            # }
-
-            operation_select = 'select goods_id,maker,image,goods_name from mall.goods where type = %s'
-            cursor = connection.cursor()
-            cursor.execute(operation_select, [type])
-            result = cursor.fetchone()
-
-            dict_res = {
-                'time': datetime.datetime.now(),
-                'goods_id': result[0],
-                'maker': result[1],
-                'image': result[2],
-                'goods_name': result[3]
-            }
-
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+            obj = SqlHelper()
+            sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                          'from mall.view_goods_search ' \
+                          'where variety = %s '
+            result1 = obj.get_list(sql_select1, [variety, ])
+            obj.close()
             resp = {
                 'id': 0,
                 'msg': 'Success',
-                'payload': dict_res
+                'payload': result1
             }
-
             return Response(resp)
+
+
+# class GoodsSearch(APIView):
+#     def get(self, request, *args, **kwargs):
+#         if request.method == 'GET':
+#             print("receive GET request at /goods_search/goods_search")
+#             data = json.loads(request.body)
+#             variety = data.get('variety')
+#
+#             print(variety)
+#
+#             operation_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+#                                'from mall.view_goods_search ' \
+#                                'where type = %s '
+#             cursor = connection.cursor()
+#             cursor.execute(operation_select, [variety])
+#             result = cursor.fetchall()
+#
+#             dict_res = {
+#                 'time': datetime.datetime.now(),
+#                 'goods_id': result[0],
+#                 'maker': result[1],
+#                 'image': result[2],
+#                 'goods_name': result[3]
+#             }
+#
+#             resp = {
+#                 'id': 0,
+#                 'msg': 'Success',
+#                 'payload': dict_res
+#             }
+#
+#             return Response(resp)
+
 
 '''
             if mer_id.filter(username=user_id).exists():
@@ -83,6 +91,7 @@ class GoodsSearch(APIView):
 
             #下面都不是
 '''
+
 
 class Test(APIView):
     def get(self, request, *args, **kwargs):
