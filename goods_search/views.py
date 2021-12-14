@@ -17,10 +17,8 @@ class GoodsSearch(APIView):
         if request.method == 'GET':
             print("receive POST request at /goods_search/goods_search")
             data = request.GET
-            variety = data.get('keywords')
-            by = data.get('by')
+            variety = data.get('variety')
             print(variety)
-            print(by)
 
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
@@ -37,6 +35,16 @@ class GoodsSearch(APIView):
             }
             return Response(resp)
 
+
+class MerchantSearch(APIView):
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            print("receive POST request at /goods_search/merchant_search")
+            data = request.GET
+            variety = data.get('keywords')
+            by = data.get('by')
+            print(variety)
+            print(by)
 
 # class GoodsSearch(APIView):
 #     def get(self, request, *args, **kwargs):
