@@ -60,7 +60,19 @@ class GoodsSearch(APIView):
                     }
                     return Response(resp)
 
-
+                else:
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where variety = %s '
+                    result1 = obj.get_list(sql_select1, [variety, ])
+                    obj.close()
+                    resp = {
+                        'id': 0,
+                        'msg': 'Success',
+                        'payload': result1
+                    }
+                    return Response(resp)
 
 
 
