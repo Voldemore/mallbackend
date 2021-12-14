@@ -18,7 +18,9 @@ class GoodsSearch(APIView):
             print("receive POST request at /goods_search/goods_search")
             data = request.GET
             variety = data.get('keywords')
+            by = data.get('by')
             print(variety)
+            print(by)
 
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
