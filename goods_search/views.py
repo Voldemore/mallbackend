@@ -61,12 +61,22 @@ class GoodsSearch(APIView):
                                   'where variety = %s ' \
                                   'order by price desc'
                     result1 = obj.get_list(sql_select1, [variety, ])
-                    obj.close()
-                    resp = {
-                        'id': 0,
-                        'msg': 'Success',
-                        'payload': result1
-                    }
+                    result2 = obj.get_one(sql_select1, [variety, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+                        return Response(resp)
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'no such goods',
+                            'payload': []
+                        }
                     return Response(resp)
 
                 else:
