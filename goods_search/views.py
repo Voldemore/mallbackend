@@ -12,6 +12,7 @@ import pymysql
 from SQL_connection.sqlhelper import SqlHelper
 
 
+
 class GoodsSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
