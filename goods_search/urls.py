@@ -3,5 +3,5 @@ from goods_search import views
 
 urlpatterns = [
     path(r'goods_search/',views.GoodsSearch.as_view()),
-    # path(r'merchant_search/',views.MerchantSearch.as_view())
+    path(r'merchant_search/',views.MerchantSearch.as_view())
 ]

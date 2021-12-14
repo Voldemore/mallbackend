@@ -11,8 +11,6 @@ import json
 import pymysql
 from SQL_connection.sqlhelper import SqlHelper
 
-
-
 class GoodsSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
@@ -46,6 +44,7 @@ class GoodsSearch(APIView):
                             'msg': 'Success',
                             'payload': result1
                         }
+
                     else:
                         resp = {
                             'id': -1,
@@ -70,7 +69,7 @@ class GoodsSearch(APIView):
                             'msg': 'Success',
                             'payload': result1
                         }
-                        return Response(resp)
+
                     else:
                         resp = {
                             'id': -1,
@@ -85,25 +84,117 @@ class GoodsSearch(APIView):
                                   'from mall.view_goods_search ' \
                                   'where variety = %s '
                     result1 = obj.get_list(sql_select1, [variety, ])
-                    obj.close()
-                    resp = {
-                        'id': 0,
-                        'msg': 'Success',
-                        'payload': result1
-                    }
+                    result2 = obj.get_one(sql_select1, [variety, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'no such goods',
+                            'payload': []
+                        }
                     return Response(resp)
 
+# =========================================================================================================================================
+# =========================================================================================================================================
+# =========================================================================================================================================
 
+class MerchantSearch(APIView):
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            print("receive POST request at /goods_search/goods_search")
+            data = request.GET
+            mer_id = data.get('seller')
+            order = data.get('order')
+            direction = data.get('direction')       #默认升序
+            print(mer_id)
+            print(order)
+            print(direction)
 
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
-# class MerchantSearch(APIView):
-#     def get(self, request, *args, **kwargs):
-#         if request.method == 'GET':
-#             print("receive POST request at /goods_search/merchant_search")
-#             data = request.GET
-#             variety = data.get('keywords')
-#
-#             print(variety)
+            if order=="价格":
+
+                if direction=="升序":
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where mer_id = %s ' \
+                                  'order by price'
+                    result1 = obj.get_list(sql_select1, [mer_id, ])
+                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'no such goods',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+                elif direction == "降序":
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where mer_id = %s ' \
+                                  'order by price desc'
+                    result1 = obj.get_list(sql_select1, [mer_id, ])
+                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+                        return Response(resp)
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'no such goods',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+                else:
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where mer_id = %s '
+                    result1 = obj.get_list(sql_select1, [mer_id, ])
+                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+                        return Response(resp)
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'no such goods',
+                            'payload': []
+                        }
+                    return Response(resp)
 
 # class GoodsSearch(APIView):
 #     def get(self, request, *args, **kwargs):
