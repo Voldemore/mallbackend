@@ -26,20 +26,40 @@ class GoodsSearch(APIView):
 
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-            obj = SqlHelper()
 
-            if not order:
-                sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
-                              'from mall.view_goods_search ' \
-                              'where variety = %s '
-                result1 = obj.get_list(sql_select1, [variety, ])
-                obj.close()
-                resp = {
-                    'id': 0,
-                    'msg': 'Success',
-                    'payload': result1
-                }
-                return Response(resp)
+            if order=="价格":
+
+                if direction=="升序":
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where variety = %s ' \
+                                  'order by price'
+                    result1 = obj.get_list(sql_select1, [variety, ])
+                    obj.close()
+                    resp = {
+                        'id': 0,
+                        'msg': 'Success',
+                        'payload': result1
+                    }
+                    return Response(resp)
+
+                elif direction == "降序":
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where variety = %s ' \
+                                  'order by price desc'
+                    result1 = obj.get_list(sql_select1, [variety, ])
+                    obj.close()
+                    resp = {
+                        'id': 0,
+                        'msg': 'Success',
+                        'payload': result1
+                    }
+                    return Response(resp)
+
+
 
 
 
