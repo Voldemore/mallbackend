@@ -17,34 +17,40 @@ class GoodsSearch(APIView):
         if request.method == 'GET':
             print("receive POST request at /goods_search/goods_search")
             data = request.GET
-            variety = data.get('variety')
+            variety = data.get('keywords')
+            order = data.get('order')
+            direction = data.get('direction')       #默认升序
             print(variety)
+            print(order)
+            print(direction)
 
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
-            sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
-                          'from mall.view_goods_search ' \
-                          'where variety = %s '
-            result1 = obj.get_list(sql_select1, [variety, ])
-            obj.close()
-            resp = {
-                'id': 0,
-                'msg': 'Success',
-                'payload': result1
-            }
-            return Response(resp)
+
+            if not order:
+                sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                              'from mall.view_goods_search ' \
+                              'where variety = %s '
+                result1 = obj.get_list(sql_select1, [variety, ])
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+                return Response(resp)
 
 
-class MerchantSearch(APIView):
-    def get(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            print("receive POST request at /goods_search/merchant_search")
-            data = request.GET
-            variety = data.get('keywords')
-            by = data.get('by')
-            print(variety)
-            print(by)
+
+# class MerchantSearch(APIView):
+#     def get(self, request, *args, **kwargs):
+#         if request.method == 'GET':
+#             print("receive POST request at /goods_search/merchant_search")
+#             data = request.GET
+#             variety = data.get('keywords')
+#
+#             print(variety)
 
 # class GoodsSearch(APIView):
 #     def get(self, request, *args, **kwargs):
@@ -77,31 +83,6 @@ class MerchantSearch(APIView):
 #             }
 #
 #             return Response(resp)
-
-
-'''
-            if mer_id.filter(username=user_id).exists():
-                print("1")
-                # inquiry_sql = 'select order_id,mer_id,goods_id,city,address from mall1.orderitem where user_id = %s'
-                resp = {
-                    'id': 0,
-                    'msg': 'Success',
-                    'payload': {
-                        "order_id": "订单号",
-                        "mer_name": "店铺名",
-                        "goods_name": "商品名",
-                        "image": "商品图片src",
-                        "num": "购买数量",
-                        "amount": "金额"
-                    }
-                }
-                return Response(resp)
-
-            #写到这儿了，表mergoods需要加上这些元素，这个表专门服务goodssearch最好
-
-            #下面都不是
-'''
-
 
 class Test(APIView):
     def get(self, request, *args, **kwargs):
