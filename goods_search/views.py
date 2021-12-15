@@ -14,7 +14,7 @@ from SQL_connection.sqlhelper import SqlHelper
 class GoodsSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
-            print("receive POST request at /goods_search/goods_search")
+            print("receive GET request at /goods_search/goods_search")
             data = request.GET
             variety = data.get('keywords')
             order = data.get('order')
@@ -109,7 +109,7 @@ class GoodsSearch(APIView):
 class MerchantSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
-            print("receive POST request at /goods_search/goods_search")
+            print("receive GET request at /goods_search/goods_search")
             data = request.GET
             mer_id = data.get('seller')
             order = data.get('order')
