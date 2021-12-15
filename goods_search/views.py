@@ -48,7 +48,7 @@ class GoodsSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -73,7 +73,7 @@ class GoodsSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -97,7 +97,7 @@ class GoodsSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -142,7 +142,7 @@ class MerchantSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -167,7 +167,7 @@ class MerchantSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -191,7 +191,7 @@ class MerchantSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'no such goods',
+                            'msg': 'Goods can not found',
                             'payload': []
                         }
                     return Response(resp)
