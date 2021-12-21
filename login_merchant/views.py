@@ -161,6 +161,7 @@ class Merchant_Info(APIView):
                 }
             return Response(resp)
 
+#该商家的所有商品
 class Goods_Bill(APIView):
     def get(self,request,*args,**kargs):
         if request.method == 'GET':  # 要求使用GET请求方式

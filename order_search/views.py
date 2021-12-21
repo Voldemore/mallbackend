@@ -11,7 +11,7 @@ from SQL_connection.sqlhelper import SqlHelper
 import pymysql
 import json
 
-
+#查看订单
 class order_inquiry(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
@@ -53,7 +53,7 @@ class order_inquiry(APIView):
                 }
             return Response(resp)
 
-
+#查看用户添加订单的信息
 class order_details(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
@@ -87,7 +87,7 @@ class order_details(APIView):
                 }
             return Response(resp)
 
-
+#订单状态
 class order_state(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -112,7 +112,7 @@ class order_state(APIView):
                 }
             return Response(resp)
 
-
+#发布评论
 class comments_release(APIView):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
