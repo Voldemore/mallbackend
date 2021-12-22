@@ -17,9 +17,9 @@ from SQL_connection.sqlhelper import SqlHelper
 
 
 # Create your views here.
-# 用户注册
 # 在内置的User中username,定义为email
 
+# 商家注册
 class Register(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -64,7 +64,7 @@ class Login(APIView):
             print("receive POST request at /merchant/login")
             data = json.loads(request.body)
             print(data)
-            email = data.get('username')  # actually email
+            email = data.get('mername')  # actually email
             password = data.get('password')
             print(email)
             print(password)
@@ -121,7 +121,7 @@ class Login(APIView):
 
                     resp = {
                         "id": -1,
-                        "msg": "username doesn't exist",
+                        "msg": "username doesn't exist--len(user)==0",
                     }
 
                 return Response(resp)
@@ -140,7 +140,9 @@ class Merchant_Info(APIView):
                 user = User.objects.get(username=mer_id)
                 if user.is_staff == 1:
                     obj = SqlHelper()
-                    sql_select = 'select mer_id,name,mobile,province,city,county,address from mall.view_merchant_users where mer_id = %s'
+                    sql_select = 'select mer_id,name,mobile,province,city,county,address ' \
+                                 'from mall.view_merchant_users ' \
+                                 'where mer_id = %s'
                     result = obj.get_one(sql_select, [mer_id, ])
                     result['time'] = datetime.datetime.now()
                     obj.close()

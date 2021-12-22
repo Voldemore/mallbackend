@@ -75,7 +75,9 @@ class Login(APIView):
                 user = User.objects.get(username=email)
                 staff_state = user.is_staff
                 if staff_state == 0:
-                    operation_select = 'select username,mobile,province,city,county,address from mall.view_customer_users where user_id = %s'
+                    operation_select = 'select username,mobile,province,city,county,address ' \
+                                       'from mall.view_customer_users ' \
+                                       'where user_id = %s'
                     obj = SqlHelper()
                     result = obj.get_one(operation_select, [email, ])
                     #result['time'] = datetime.datetime.now()
@@ -119,7 +121,7 @@ class Login(APIView):
 
                     resp = {
                         "id": -1,
-                        "msg": "username doesn't exist",
+                        "msg": "username doesn't exist--len(user)=0",
                     }
 
                 return Response(resp)
