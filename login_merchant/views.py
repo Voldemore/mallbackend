@@ -172,34 +172,30 @@ class Home(APIView):
             data = request.GET  # 处理请求
             mer_id = data.get('mer_id')
             print(mer_id)
-            user = User.objects.filter(username=mer_id)
-            if user is not None:
-                user = User.objects.get(username=mer_id)
-                if user.is_staff == 1:
-                    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
-                    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-                    obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
-                                  'from mall.view_goods_search ' \
-                                  'where mer_id = %s ' \
-                                  'order by price'
-                    result1 = obj.get_list(sql_select1, [mer_id, ])
-                    result2 = obj.get_one(sql_select1, [mer_id, ])
-                    print(result2)
-                    if result2 is not None:
-                        obj.close()
-                        resp = {
-                            'id': 0,
-                            'msg': 'Success',
-                            'payload': result1
-                        }
-                    else:
-                        resp = {
-                            'id': -1,
-                            'msg': 'Goods can not found',
-                            'payload': []
-                        }
-                    return Response(resp)
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+            obj = SqlHelper()
+            sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                          'from mall.view_goods_search ' \
+                          'where mer_id = %s ' \
+                          'order by price'
+            result1 = obj.get_list(sql_select1, [mer_id, ])
+            result2 = obj.get_one(sql_select1, [mer_id, ])
+            print(result2)
+            if result2 is not None:
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods can not found',
+                    'payload': []
+                }
+            return Response(resp)
 
 
 # 该商家的所有订单
