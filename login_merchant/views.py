@@ -37,7 +37,7 @@ class Register(APIView):
             county = data.get('county')
             address = data.get('address')
 
-            if User.objects.filter(username=email).exist():
+            if User.objects.filter(username=email).exists():
                 resp = {
                     'id': -1,
                     'msg': 'Username already exists',
@@ -57,7 +57,7 @@ class Register(APIView):
         return Response(resp)
 
 
-# 用户登录
+# 商家登录
 class Login(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -161,9 +161,48 @@ class Merchant_Info(APIView):
                 }
             return Response(resp)
 
-#该商家的所有商品
+
+# 该商家的所有商品
+class Goods_Search(APIView):
+    def get(self, request, *args, **kargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /bill_of_goods")
+            data = request.GET  # 处理请求
+            mer_id = int(data.get('merID'))
+            print(mer_id)
+            user = User.objects.filter(username=mer_id)
+            if user is not None:
+                user = User.objects.get(username=mer_id)
+                if user.is_staff == 1:
+                    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+                    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+                    obj = SqlHelper()
+                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                  'from mall.view_goods_search ' \
+                                  'where mer_id = %s ' \
+                                  'order by price'
+                    result1 = obj.get_list(sql_select1, [mer_id, ])
+                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'Goods can not found',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+
+# 该商家的所有订单
 class Goods_Bill(APIView):
-    def get(self,request,*args,**kargs):
+    def get(self, request, *args, **kargs):
         if request.method == 'GET':  # 要求使用GET请求方式
             print("receive GET request at /bill_of_goods")
             data = request.GET  # 处理请求
@@ -200,6 +239,3 @@ class Goods_Bill(APIView):
                     'msg': "the merchant id doesn't exist"
                 }
             return Response(resp)
-
-
-
