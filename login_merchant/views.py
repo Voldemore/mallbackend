@@ -165,12 +165,12 @@ class Merchant_Info(APIView):
 
 
 # 该商家的所有商品
-class Goods_Search(APIView):
+class Home(APIView):
     def get(self, request, *args, **kargs):
         if request.method == 'GET':  # 要求使用GET请求方式
-            print("receive GET request at /bill_of_goods")
+            print("receive GET request at /home")
             data = request.GET  # 处理请求
-            mer_id = int(data.get('merID'))
+            mer_id = data.get('mer_id')
             print(mer_id)
             user = User.objects.filter(username=mer_id)
             if user is not None:
@@ -216,14 +216,15 @@ class Goods_Bill(APIView):
                 if user.is_staff == 1:
                     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
                     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-                    sql_create_view = "create view view_mergoods as select goods_id,price,sales,stock from mergoods where mer_id = %s"
-                    cursor.execute(sql_create_view, [mer_id, ])
-                    sql_select = "select view_goods_info.goods_id,view_goods_info.goods_name,view_goods_info.image,view_mergoods.price,view_mergoods.sales,view_mergoods.stock from view_goods_info,view_mergoods where view_goods_info.goods_id = view_mergoods"
+                    sql_select0 = "select goods_id,price,sales,stock " \
+                                      "from mergoods " \
+                                      "where mer_id = %s"
+                    cursor.execute(sql_select0, [mer_id, ])
+                    sql_select = "select goods.goods_id,goods.goods_name,goods.image,mergoods.price,mergoods.sales,mergoods.stock " \
+                                 "from goods,mergoods " \
+                                 "where goods.goods_id = mergoods.goods_id"
                     cursor.execute(sql_select)
                     result_list = cursor.fetchall()
-                    sql_drop = 'drop view view_mergoods'
-                    cursor.execute(sql_drop)
-                    cursor.close()
                     conn.close()
                     resp = {
                         'id': 0,
