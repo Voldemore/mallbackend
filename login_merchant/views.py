@@ -192,10 +192,24 @@ class Home(APIView):
             else:
                 resp = {
                     'id': -1,
-                    'msg': 'Goods can not found',
+                    'msg': 'Goods cannot found',
                     'payload': []
                 }
             return Response(resp)
+
+
+# 删除商品
+# class Delete(APIView):
+#     def get(self, request, *args, **kargs):
+#         if request.method == 'GET':  # 要求使用GET请求方式
+#             print("receive GET request at /delete")
+#             data = request.GET  # 处理请求
+#             mer_id = data.get('mer_id')
+#             print(mer_id)
+#             goods_id = data.get('goods_id')
+#             print(goods_id)
+
+# ####################################以下存疑#######################################
 
 
 # 该商家的所有订单
@@ -204,7 +218,7 @@ class Goods_Bill(APIView):
         if request.method == 'GET':  # 要求使用GET请求方式
             print("receive GET request at /bill_of_goods")
             data = request.GET  # 处理请求
-            mer_id = int(data.get('merID'))
+            mer_id = data.get('mer_id')
             print(mer_id)
             user = User.objects.filter(username=mer_id)
             if user is not None:
