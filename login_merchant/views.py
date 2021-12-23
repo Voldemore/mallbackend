@@ -233,10 +233,21 @@ class Add(APIView):
                          'where mer_id = %s '
             check1 = obj.get_one(sql_check1, [mer_id,])
             print(check1)
+
             if check1 is not None:
-                sql_addgoods = 'select name ' \
-                               'from merchant ' \
-                               'where mer_id = %s '
+                sql_addgoods = 'insert into mall.mergoods(mer_id, goods_id, price, stock, sales) ' \
+                               'values(%s, %s, %s, %s, %s)'
+                obj.modify(sql_addgoods, [mer_id, goods_id, price, stock, sales])
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                }
+        return Response(resp)
+
+
+
+
 
 
 
