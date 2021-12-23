@@ -175,8 +175,8 @@ class Home(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
-            sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
-                          'from mall.view_goods_search ' \
+            sql_select1 = 'select goods_id,goods_name,image,price,sales,stock ' \
+                          'from mall.view_goods_search2 ' \
                           'where mer_id = %s ' \
                           'order by price'
             result1 = obj.get_list(sql_select1, [mer_id, ])
