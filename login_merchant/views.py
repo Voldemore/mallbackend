@@ -209,6 +209,41 @@ class Home(APIView):
 #             goods_id = data.get('goods_id')
 #             print(goods_id)
 
+
+class Add(APIView):
+    def get(self, request, *args, **kargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /bill_of_goods")
+            data = request.GET  # 处理请求
+            mer_id = data.get('mer_id')
+            goods_id = data.get('goods_id')
+            price = data.get('price')
+            sales = data.get('sales')
+            stock = data.get('stock')
+            print(mer_id)
+            print(goods_id)
+            print(price)
+            print(sales)
+            print(stock)
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+            obj = SqlHelper()
+            sql_check1 = 'select name ' \
+                         'from merchant ' \
+                         'where mer_id = %s '
+            check1 = obj.get_one(sql_check1, [mer_id,])
+            print(check1)
+            if check1 is not None:
+                sql_addgoods = 'select name ' \
+                               'from merchant ' \
+                               'where mer_id = %s '
+
+
+
+
+
+
+
 # ####################################以下存疑#######################################
 
 
