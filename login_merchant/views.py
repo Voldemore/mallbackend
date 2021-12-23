@@ -211,10 +211,10 @@ class Home(APIView):
 
 
 class Add(APIView):
-    def get(self, request, *args, **kargs):
-        if request.method == 'GET':  # 要求使用GET请求方式
-            print("receive GET request at /bill_of_goods")
-            data = request.GET  # 处理请求
+    def post(self, request, *args, **kargs):
+        if request.method == 'POST':  # 要求使用POST请求方式
+            print("receive POST request at /bill_of_goods")
+            data = json.loads(request.body)
             mer_id = data.get('mer_id')
             goods_id = data.get('goods_id')
             price = data.get('price')
@@ -229,7 +229,7 @@ class Add(APIView):
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
             sql_check1 = 'select name ' \
-                         'from merchant ' \
+                         'from mall.merchant ' \
                          'where mer_id = %s '
             check1 = obj.get_one(sql_check1, [mer_id,])
             print(check1)
@@ -243,7 +243,12 @@ class Add(APIView):
                     'id': 0,
                     'msg': 'Success',
                 }
-        return Response(resp)
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Fail'
+                }
+            return Response(resp)
 
 
 
