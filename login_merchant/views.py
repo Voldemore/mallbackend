@@ -168,7 +168,7 @@ class Merchant_Info(APIView):
 class Home(APIView):
     def get(self, request, *args, **kargs):
         if request.method == 'GET':  # 要求使用GET请求方式
-            print("receive GET request at /delete")
+            print("receive GET request at /home")
             data = request.GET  # 处理请求
             mer_id = data.get('mer_id')
             print(mer_id)
@@ -246,7 +246,7 @@ class Add(APIView):
 class Delete(APIView):
     def post(self, request, *args, **kargs):
         if request.method == 'POST':  # 要求使用POST请求方式
-            print("receive POST request at /bill_of_goods")
+            print("receive POST request at /delete")
             data = json.loads(request.body)
             mer_id = data.get('mer_id')
             goods_id = data.get('goods_id')
