@@ -168,7 +168,7 @@ class Merchant_Info(APIView):
 class Home(APIView):
     def get(self, request, *args, **kargs):
         if request.method == 'GET':  # 要求使用GET请求方式
-            print("receive GET request at /home")
+            print("receive GET request at /delete")
             data = request.GET  # 处理请求
             mer_id = data.get('mer_id')
             print(mer_id)
@@ -198,19 +198,12 @@ class Home(APIView):
             return Response(resp)
 
 
-# 删除商品
-# class Delete(APIView):
-#     def post(self, request, *args, **kargs):
-#         if request.method == 'POST':  # 要求使用POST请求方式
-#             print("receive POST request at /bill_of_goods")
-#             data = json.loads(request.body)
 
-
-
+# 添加商品
 class Add(APIView):
     def post(self, request, *args, **kargs):
         if request.method == 'POST':  # 要求使用POST请求方式
-            print("receive POST request at /bill_of_goods")
+            print("receive POST request at /addgoods")
             data = json.loads(request.body)
             mer_id = data.get('mer_id')
             goods_id = data.get('goods_id')
@@ -249,10 +242,43 @@ class Add(APIView):
 
 
 
+# 删除商品
+class Delete(APIView):
+    def post(self, request, *args, **kargs):
+        if request.method == 'POST':  # 要求使用POST请求方式
+            print("receive POST request at /bill_of_goods")
+            data = json.loads(request.body)
+            mer_id = data.get('mer_id')
+            goods_id = data.get('goods_id')
+            print(mer_id)
+            print(goods_id)
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+            obj = SqlHelper()
+            sql_check2 = 'select price ' \
+                         'from mall.mergoods ' \
+                         'where mer_id = %s ' \
+                         'and goods_id = %s'
+            check2 = obj.get_one(sql_check2, [mer_id, goods_id,])
+            print(check2)
 
-
-
-
+            if check2 is not None:
+                sql_delete = 'delete ' \
+                             'from mall.mergoods ' \
+                             'where mer_id = %s ' \
+                             'and goods_id = %s'
+                obj.modify(sql_delete, [mer_id, goods_id])
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                }
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Fail'
+                }
+            return Response(resp)
 
 
 
