@@ -200,14 +200,11 @@ class Home(APIView):
 
 # 删除商品
 # class Delete(APIView):
-#     def get(self, request, *args, **kargs):
-#         if request.method == 'GET':  # 要求使用GET请求方式
-#             print("receive GET request at /delete")
-#             data = request.GET  # 处理请求
-#             mer_id = data.get('mer_id')
-#             print(mer_id)
-#             goods_id = data.get('goods_id')
-#             print(goods_id)
+#     def post(self, request, *args, **kargs):
+#         if request.method == 'POST':  # 要求使用POST请求方式
+#             print("receive POST request at /bill_of_goods")
+#             data = json.loads(request.body)
+
 
 
 class Add(APIView):
