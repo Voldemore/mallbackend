@@ -163,11 +163,12 @@ class Merchant_Info(APIView):
                 }
             return Response(resp)
 
+# ##############################Info_Mod未经测试
 
 class Info_Mod(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            print("receive POST request at /merchant/login")
+            print("receive POST request at /merchant/merinfo/modification/")
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
@@ -180,8 +181,8 @@ class Info_Mod(APIView):
 
             # 修改密码
 
-            u = User.objects.get(username = name)
-            u.set_password(password = password)
+            u = User.objects.get(username=name)
+            u.set_password(password=password)
             u.save()
 
             # 其他部分
