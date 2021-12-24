@@ -2,5 +2,6 @@ from django.urls import path
 from cart import views
 
 urlpatterns = [
-    path(r'query/', views.cart_query.as_view())
+    path(r'inquiry/', views.cart_inquiry.as_view()),
+    path(r'delete/', views.carts_delete.as_view())
 ]
