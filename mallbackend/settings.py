@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'goods_search',
     'cart',
     'query',
-    'goods_detail'
+
 
 
 ]
