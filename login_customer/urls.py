@@ -4,5 +4,6 @@ from login_customer import views
 
 urlpatterns = [
     path(r'register/', views.Register.as_view()),
-    path(r'login/', views.Login.as_view())
+    path(r'login/', views.Login.as_view()),
+    path(r'info_modification/',views.Info_Mod.as_view())
 ]
