@@ -10,7 +10,8 @@ from django.db import connection
 import json
 import pymysql
 from SQL_connection.sqlhelper import SqlHelper
-
+#import datetime from datetime
+from datetime import datetime
 class GoodsSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
@@ -262,6 +263,7 @@ class Goods_detail(APIView):
                     'msg': 'goods not found'
                 }
             obj.close()
+            print("detail")
             return Response(resp)
 
 
@@ -278,6 +280,7 @@ class Goods_comments(APIView):
                          'where goods_id = %s and mer_id = %s'
             obj = SqlHelper()
             result = obj.get_list(sql_select, [good_id, mer_id, ])
+            print(result)
             if result:
                 resp = {
                     'id': '0',
@@ -290,4 +293,39 @@ class Goods_comments(APIView):
                     'msg': 'goods not found'
                 }
             obj.close()
+            print("comments")
             return Response(resp)
+
+class add_to_cart(APIView):
+    def post(self,request,*args,**kwargs):
+        if request.method == 'POST':
+            print("receive POST request at /goods_detail/addtocart/")
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            goods_id = data.get('goods_id')
+            mer_id = data.get('mer_id')
+            num = data.get('num')
+            add_time = datetime.now()
+            obj = SqlHelper()
+
+            sql_select = "select stock from mall.mergoods where mer_id = %s and goods_id= %s"
+
+            result = obj.get_one(sql_select, [mer_id,goods_id, ])
+            stock = result['stock']
+            if stock > 0:
+                sql_insert = "insert into mall.cart(goods_id, mer_id, user_id, num, add_time) " \
+                             "values (%s,%s,%s,%s,%s)"
+
+                obj.modify(sql_insert, [goods_id, mer_id, user_id, num, add_time, ])
+                obj.close()
+                resp = {
+                    "id": 0,
+                    "msg": "Success",
+                }
+                return Response(resp)
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods not found'
+                }
+                return Response(resp)

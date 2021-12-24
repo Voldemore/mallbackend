@@ -15,7 +15,7 @@ from django.http import QueryDict
 
 
 # Create your views here.
-
+#购物车查询
 class cart_inquiry(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -51,28 +51,46 @@ class cart_inquiry(APIView):
                 }
             return Response(resp)
 
-
+#删除购物车
 class carts_delete(APIView):
     def delete(self, request, *args, **kwargs):
         if request.method == 'DELETE':
-            data = QueryDict(request.body)
+            data = json.loads(request.body)
+            print(data)
             user_id = data.get('user_id')
             goods_id = int(data.get('goods_id'))
+            #print(type(goods_id))
             mer_id = data.get('mer_id')
             sql_delete = "delete from mall.cart " \
                          "where goods_id =%s and mer_id = %s and user_id = %s"
             obj = SqlHelper()
             result = obj.create(sql_delete, [goods_id, mer_id, user_id, ])
             obj.close()
-            if result:
-                resp = {
-                    'id': '0',
-                    'msg': 'Success'
+            print(result)
+            resp = {
+                'id': '0',
+                'msg': 'Success'
                 }
-                return Response(resp)
-            else:
-                resp = {
-                    'id': '-1',
-                    'msg': 'failure'
-                }
-                return Response(resp)
+            return Response(resp)
+            # else:
+            #     resp = {
+            #         'id': '-1',
+            #         'msg': 'failure'
+            #     }
+            #     return Response(resp)
+
+#购物车生成订单
+class Confirm_order(APIView):
+    def post(self,request,*args,**kwargs):
+        # data = json.loads(request.body)
+        # user_id = data.get('user_id')
+        # addr_id = int(data.get('addr_id'))
+        # goods_id = int(data.get(goods_id))
+        # mer_id = data.get('mer_id)
+        # num = int(data.get('num'))
+        # amount = int(data.get('amount')
+        #
+        #
+        # - num
+        # - amount
+        pass

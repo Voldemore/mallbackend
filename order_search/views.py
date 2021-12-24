@@ -67,6 +67,7 @@ class order_details(APIView):
             print("receive GET request at /order_details")
 
             data = request.GET  # 处理请求
+            #print(data.get('order_id'))
             order_id = int(data.get('order_id'))
             print(order_id)
             sql_select1 = 'select add_time,comments,addr_id from mall.orderitem where order_id = %s'
@@ -80,8 +81,10 @@ class order_details(APIView):
                 result1['name'] = result2['name']
                 result1['mobile'] = result2['mobile']
                 result1['province'] = result2['province']
+                result1['city'] = result2['city']
                 result1['county'] = result2['county']
                 result1['address'] = result2['address']
+                print(result1)
                 resp = {
                     'id': '0',
                     'msg': 'success',
