@@ -164,6 +164,35 @@ class Merchant_Info(APIView):
             return Response(resp)
 
 
+class Info_Mod(APIView):
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            print("receive POST request at /merchant/login")
+            data = json.loads(request.body)
+            email = data.get('email')
+            password = data.get('password')
+            username = data.get('name')
+            mobile = data.get('mobile')
+            province = data.get('province')
+            city = data.get('city')
+            county = data.get('county')
+            address = data.get('address')
+            # 修改密码
+
+            # 其他部分
+            obj = SqlHelper()
+            info_update = 'update set mall.merchant(name,mobile,province,city,county,address)'
+
+            obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
+            resp = {
+                'id': 0,
+                'msg': 'Success',
+            }
+            obj.close()
+
+        return Response(resp)
+
+
 # 该商家的所有商品
 class Home(APIView):
     def get(self, request, *args, **kargs):
