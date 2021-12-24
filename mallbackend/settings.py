@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django_rename_app',
     'rest_framework',
     'rest_framework.authtoken',
-    'goods_management',
     'goods_search',
     'cart',
     'merchant_goods',
