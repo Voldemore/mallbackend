@@ -14,8 +14,6 @@ from SQL_connection.sqlhelper import SqlHelper
 from django.http import QueryDict
 
 
-
-
 # Create your views here.
 
 class cart_inquiry(APIView):
@@ -53,8 +51,9 @@ class cart_inquiry(APIView):
                 }
             return Response(resp)
 
+
 class carts_delete(APIView):
-    def delete(self,request,*args,**kwargs):
+    def delete(self, request, *args, **kwargs):
         if request.method == 'DELETE':
             data = QueryDict(request.body)
             user_id = data.get('user_id')
@@ -63,7 +62,7 @@ class carts_delete(APIView):
             sql_delete = "delete from mall.cart " \
                          "where goods_id =%s and mer_id = %s and user_id = %s"
             obj = SqlHelper()
-            result = obj.create(sql_delete,[goods_id, mer_id, user_id, ])
+            result = obj.create(sql_delete, [goods_id, mer_id, user_id, ])
             obj.close()
             if result:
                 resp = {
