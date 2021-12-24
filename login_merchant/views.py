@@ -29,7 +29,7 @@ class Register(APIView):
             # handle the request
             data = json.loads(request.body)
             email = data.get('email')
-            mername = data.get('mername')
+            name = data.get('name')
             shopname = data.get('shopname')
             password = data.get('password')
             mobile = data.get('mobile')
@@ -49,7 +49,7 @@ class Register(APIView):
                 operation_insert = 'insert into mall.merchant(mer_id,name,mobile,province,city,county,address,shopname) ' \
                                    'values(%s,%s,%s,%s,%s,%s,%s,%s)'
 
-                obj.modify(operation_insert, [email, mername, mobile, province, city, county, address, shopname, ])
+                obj.modify(operation_insert, [email, name, mobile, province, city, county, address, shopname, ])
                 resp = {
                     'id': 0,
                     'msg': 'Success',
