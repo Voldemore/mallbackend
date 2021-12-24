@@ -25,6 +25,7 @@ urlpatterns = [
     path(r'api/goods_search/', include('goods_search.urls')),
     path(r'api/merchant/', include('login_merchant.urls')),
     path(r'api/merchant_goods/', include('merchant_goods.urls')),
+    path(r'api/merchant_orders/', include('merchant_orders.urls')),
     path(r'api/cart', include('cart.urls')),
     path(r'api/query', include('query.urls')),
 ]
