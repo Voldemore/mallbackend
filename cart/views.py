@@ -14,16 +14,6 @@ from SQL_connection.sqlhelper import SqlHelper
 from django.http import QueryDict
 
 
-class UserView(View):
-
-    def get(self, request):
-        pass
-
-    def delete(self, request):
-        DELETE = QueryDict(request.body)
-        name = DELETE.get('name')
-        print(name)
-        return JsonResponse({'code': 200, 'msg': 'success'}, safe=False)
 
 
 # Create your views here.
