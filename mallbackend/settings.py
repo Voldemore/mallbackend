@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'goods_management',
     'goods_search',
     'cart',
+    'merchant_goods',
+    'merchant_orders',
     'query',
 
 
