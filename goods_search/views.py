@@ -231,3 +231,63 @@ class MerchantSearch(APIView):
 class Test(APIView):
     def get(self, request, *args, **kwargs):
         return Response("困！")
+
+# =========================================================================================================================================
+# =========================================================================================================================================
+# =========================================================================================================================================
+#查询商品的详情
+class Goods_detail(APIView):
+    def get(self,request,*args,**kwargs):
+        if request.method == 'GET':
+            print("receive GET request at /order_details")
+            data = request.GET  # 处理请求
+            good_id = int(data.get('goods_id'))
+            mer_id = data.get('mer_id')
+
+            sql_select = "select goods_name,mer_name,image,des,price,sales,stock " \
+                         "from mall.view_goods_detail " \
+                         "where goods_id = %s and mer_id = %s"
+            obj = SqlHelper()
+            result = obj.get_one(sql_select, [good_id, mer_id, ])
+            if result:
+                resp = {
+                    'id': '0',
+                    'msg': 'success',
+                    'payload': result
+                }
+
+            else:
+                resp = {
+                    'id': "-1",
+                    'msg': 'goods not found'
+                }
+            obj.close()
+            return Response(resp)
+
+
+#查找一个商品所有的评论
+class Goods_comments(APIView):
+    def get(self,request,*args,**kwargs):
+        if request.method == 'GET':
+            print("receive GET request at /order_details")
+            data = request.GET  # 处理请求
+            good_id = int(data.get('goods_id'))
+            mer_id = data.get('mer_id')
+            sql_select = 'select username,comments ' \
+                         'from mall.view_users_comments ' \
+                         'where goods_id = %s and mer_id = %s'
+            obj = SqlHelper()
+            result = obj.get_list(sql_select, [good_id, mer_id, ])
+            if result:
+                resp = {
+                    'id': '0',
+                    'msg': 'Success',
+                    'payload': result
+                }
+            else:
+                resp = {
+                    'id': '-1',
+                    'msg': 'goods not found'
+                }
+            obj.close()
+            return Response(resp)
