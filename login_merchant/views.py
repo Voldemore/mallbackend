@@ -171,19 +171,23 @@ class Info_Mod(APIView):
             data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
-            username = data.get('name')
+            name = data.get('name')
             mobile = data.get('mobile')
             province = data.get('province')
             city = data.get('city')
             county = data.get('county')
             address = data.get('address')
+
             # 修改密码
+
+            u = User.objects.get(username = name)
+            u.set_password(password = password)
+            u.save()
 
             # 其他部分
             obj = SqlHelper()
-            info_update = 'update set mall.merchant(name,mobile,province,city,county,address)'
-
-            obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
+            info_update = 'update mall.merchant set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s'
+            obj.modify(info_update, [name, mobile, province, city, county, address, ])
             resp = {
                 'id': 0,
                 'msg': 'Success',
