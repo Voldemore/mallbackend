@@ -1,7 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
-# Create your views here.
 import datetime
 import pymysql
 from django.contrib.auth.models import User

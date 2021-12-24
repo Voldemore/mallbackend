@@ -1,5 +1,5 @@
 from django.urls import path
-from login_merchant import views
+from merchant_goods import views
 
 urlpatterns = [
     path(r'goods_search/', views.Goods_Bill.as_view()),
