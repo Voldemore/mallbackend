@@ -301,11 +301,11 @@ class Goods_Bill(APIView):
                     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
                     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
                     sql_select0 = "select goods_id,price,sales,stock " \
-                                      "from mergoods " \
+                                      "from mall.mergoods " \
                                       "where mer_id = %s"
                     cursor.execute(sql_select0, [mer_id, ])
                     sql_select = "select goods.goods_id,goods.goods_name,goods.image,mergoods.price,mergoods.sales,mergoods.stock " \
-                                 "from goods,mergoods " \
+                                 "from mall.goods,mall.mergoods " \
                                  "where goods.goods_id = mergoods.goods_id"
                     cursor.execute(sql_select)
                     result_list = cursor.fetchall()
