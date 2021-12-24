@@ -125,3 +125,31 @@ class Login(APIView):
                     }
 
                 return Response(resp)
+
+#获取用户收货地址
+class address(APIView):
+    def get(self, request, *args, **kargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /customer_adddress")
+            data = request.GET  # 处理请求
+            user_id = data.get('user_id')
+            print(user_id)
+            user = User.objects.filter(username=user_id)
+            if user is not None:
+                sql_select = "select addr_id,name,mobile,province,city,county,address " \
+                             "from mall.address where user_id = %s"
+                obj = SqlHelper()
+                result = obj.get_list(sql_select, [user_id, ])
+                obj.close()
+                resp = {
+                    'id':'0',
+                    'msg':'Success',
+                    'payload': result,
+                }
+                return Response(resp)
+            else:
+                resp={
+                    'id': '-1',
+                    'msg':'user not found'
+                }
+                return Response(resp)
