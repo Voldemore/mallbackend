@@ -11,7 +11,8 @@ from SQL_connection.sqlhelper import SqlHelper
 import pymysql
 import json
 
-#用户查看订单
+
+# 用户查看订单（这一块可能会有错误）
 class order_inquiry(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
@@ -60,12 +61,12 @@ class order_inquiry(APIView):
                 }
             return Response(resp)
 
-#查看用户添加订单的信息
+
+# 查看用户添加订单的信息
 class order_details(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
             print("receive GET request at /order_details")
-
             data = request.GET  # 处理请求
             order_id = int(data.get('order_id'))
             print(order_id)
@@ -80,8 +81,10 @@ class order_details(APIView):
                 result1['name'] = result2['name']
                 result1['mobile'] = result2['mobile']
                 result1['province'] = result2['province']
+                result1['city'] = result2['city']
                 result1['county'] = result2['county']
                 result1['address'] = result2['address']
+
                 resp = {
                     'id': '0',
                     'msg': 'success',
@@ -94,13 +97,14 @@ class order_details(APIView):
                 }
             return Response(resp)
 
-#订单状态
+
+# 订单状态
 class order_state(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
+            print("received post request at api/orders/state/")
             data = json.loads(request.body)
             order_id = int(data.get('order_id'))
-            print(order_id)
             sql_select = 'select order_id from mall.orderitem where order_id = %s'
             obj = SqlHelper()
             result = obj.get_one(sql_select, [order_id, ])
@@ -119,9 +123,11 @@ class order_state(APIView):
                 }
             return Response(resp)
 
-#发布评论
+
+# 发布评论
 class comments_release(APIView):
     def post(self, request, *args, **kwargs):
+        print('received the post request at api/orders/comments/')
         data = json.loads(request.body)
         order_id = int(data.get('order_id'))
         comments = data.get('comments')

@@ -12,10 +12,11 @@ from django.db import connection
 import json
 from SQL_connection.sqlhelper import SqlHelper
 from django.http import QueryDict
+from datetime import datetime
 
 
 # Create your views here.
-
+#购物车查询
 class cart_inquiry(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -51,11 +52,12 @@ class cart_inquiry(APIView):
                 }
             return Response(resp)
 
-
+#删除购物车
 class carts_delete(APIView):
     def delete(self, request, *args, **kwargs):
         if request.method == 'DELETE':
-            data = QueryDict(request.body)
+            data = json.loads(request.body)
+            print(data)
             user_id = data.get('user_id')
             goods_id = int(data.get('goods_id'))
             mer_id = data.get('mer_id')
@@ -64,15 +66,61 @@ class carts_delete(APIView):
             obj = SqlHelper()
             result = obj.create(sql_delete, [goods_id, mer_id, user_id, ])
             obj.close()
-            if result:
-                resp = {
-                    'id': '0',
-                    'msg': 'Success'
+            print(result)
+            resp = {
+                'id': '0',
+                'msg': 'Success'
                 }
-                return Response(resp)
-            else:
-                resp = {
-                    'id': '-1',
-                    'msg': 'failure'
-                }
-                return Response(resp)
+            return Response(resp)
+            # else:
+            #     resp = {
+            #         'id': '-1',
+            #         'msg': 'failure'
+            #     }
+            #     return Response(resp)
+
+#购物车生成订单
+class Confirm_order(APIView):
+    def post(self,request,*args,**kwargs):
+        print("received the post request at api/carts/comfirm_order/")
+        data = json.loads(request.body)  # 涉及到购物车，库存，订单那张表
+        print(data)
+        user_id = data.get('user_id')  # 购物车
+        addr_id = int(data.get('addr_id'))  # 订单
+        goods_id = int(data.get('goods_id'))  # 购物车  mergoods
+        mer_id = data.get('mer_id')  # 购物车 mergoods
+        num = int(data.get('num'))  # 购物车 mergoods
+        amount = int(data.get('amount'))  # 订单表
+        flag = 0  # 标志变量，如果生成订单成功则为0，若失败，则为1
+        conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+        try:
+            sql_delete = "delete from mall.cart where goods_id = %s and mer_id = %s and user_id = %s"
+            cursor.execute(sql_delete,[goods_id, mer_id, user_id, ])
+            sql_update = "update mall.mergoods set stock = stock - %s where mer_id = %s and goods_id= %s"
+            cursor.execute(sql_update, [num, mer_id, goods_id, ])
+            sql_insert = "insert into mall.orderitem(goods_id, mer_id, user_id, num, amount, add_time, addr_id) " \
+                         "values (%s,%s,%s,%s,%s,%s,%s)"
+            add_time = datetime.now()
+            cursor.execute(sql_insert, [goods_id, mer_id, user_id, num, amount, add_time, addr_id, ])
+            conn.commit()  # 事务提交
+        except Exception as e:
+            conn.rollback()  # 事务回滚
+            flag = 1
+        finally:
+            # 5.释放资源
+            cursor.close()
+            conn.close()
+        if flag == 0:
+            resp = {
+                "id": 0,
+                "msg": "Success"
+            }
+        if flag == 1:
+            resp = {
+                "id": -1,
+                "msg": "failure"
+            }
+        return Response(resp)
+
+

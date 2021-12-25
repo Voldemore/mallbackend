@@ -41,9 +41,13 @@ class Register(APIView):
             else:
                 user = User.objects.create_user(username=email, password=password, is_staff=0)
                 obj = SqlHelper()
-
+                print("1")
+                print(email)
                 operation_insert = 'insert into mall.users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
                 obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
+                operation_select = "select * from mall.users where user_id=%s"
+                result = obj.get_one(operation_select, [email, ])
+                print(result)
                 obj.close()
                 resp = {
                     'id': 0,
@@ -80,7 +84,7 @@ class Login(APIView):
                                        'where user_id = %s'
                     obj = SqlHelper()
                     result = obj.get_one(operation_select, [email, ])
-                    #result['time'] = datetime.datetime.now()
+                    # result['time'] = datetime.datetime.now()
                     obj.close()
                     # return
                     resp = {
@@ -126,8 +130,9 @@ class Login(APIView):
 
                 return Response(resp)
 
-#获取用户收货地址
-class address(APIView):
+
+# 获取用户收货地址
+class Receive_Address(APIView):
     def get(self, request, *args, **kargs):
         if request.method == 'GET':  # 要求使用GET请求方式
             print("receive GET request at /customer_adddress")
@@ -142,14 +147,85 @@ class address(APIView):
                 result = obj.get_list(sql_select, [user_id, ])
                 obj.close()
                 resp = {
-                    'id':'0',
-                    'msg':'Success',
+                    'id': '0',
+                    'msg': 'Success',
                     'payload': result,
                 }
                 return Response(resp)
             else:
-                resp={
+                resp = {
                     'id': '-1',
-                    'msg':'user not found'
+                    'msg': 'user not found'
                 }
                 return Response(resp)
+
+# 添加用户收货地址
+class Add_Receive_address(APIView):
+    def post(self,request,*args,**kwargs):
+        if request.method == 'POST':
+            print("receive the post request at api/customer/add_address/")
+            data = json.loads(request.body)
+            print(data)
+            user_id = data.get("user_id")
+            name = data.get("name")
+            mobile = data.get("mobile")
+            province = data.get("province")
+            city = data.get('city')
+            county = data.get('county')
+            address = data.get('address')
+            if User.objects.filter(username=user_id).exists():
+                obj = SqlHelper()
+                sql_insert = "insert into mall.address(user_id, name, mobile, province, city, county, address) " \
+                             "VALUES (%s,%s,%s,%s,%s,%s,%s)"
+                obj.modify(sql_insert, [user_id, name, mobile, province, city, county, address, ])
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                }
+            else:
+                resp = {
+                    "id": -1,
+                    "msg": "user not found"
+                }
+            return Response(resp)
+
+
+# 修改用户信息
+class Info_Mod(APIView):
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            print("receive POST request at /customer/info/modification/")
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            password = data.get('password')
+            username = data.get('username')
+            mobile = data.get('mobile')
+            province = data.get('province')
+            city = data.get('city')
+            county = data.get('county')
+            address = data.get('address')
+
+            # 修改密码
+
+            u = User.objects.get(username=user_id)
+            u.set_password(password)
+            u.save()
+
+            # 其他部分
+            obj = SqlHelper()
+            info_update = 'update mall.users ' \
+                          'set username=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s ' \
+                          'where user_id = %s'
+            obj.modify(info_update, [username, mobile, province, city, county, address, user_id, ])
+            sql_select = "select * from mall.users where user_id = %s"
+            result = obj.get_one(sql_select, [user_id, ])
+            print(result)
+            resp = {
+                'id': 0,
+                'msg': 'Success',
+                'payload': result,
+            }
+            obj.close()
+            print(resp)
+
+        return Response(resp)
