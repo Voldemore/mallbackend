@@ -101,6 +101,7 @@ class order_details(APIView):
 class order_state(APIView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
+            print("received post request at api/orders/state/")
             data = json.loads(request.body)
             order_id = int(data.get('order_id'))
             print(order_id)
@@ -125,6 +126,7 @@ class order_state(APIView):
 #发布评论
 class comments_release(APIView):
     def post(self, request, *args, **kwargs):
+        print('received the post request at api/orders/comments/')
         data = json.loads(request.body)
         order_id = int(data.get('order_id'))
         comments = data.get('comments')
