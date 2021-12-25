@@ -196,7 +196,7 @@ class Info_Mod(APIView):
             # 其他部分
             obj = SqlHelper()
             info_update = 'update mall.merchant ' \
-                          'set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s, shopname=%s ' \
+                          'set name = %s, mobile = %s, province = %s, city = %s, county = %s, address = %s, shopname = %s ' \
                           'where mer_id = %s'
             obj.modify(info_update, [name, mobile, province, city, county, address, shopname, mer_id, ])
             # ss = 'select shopname ' \

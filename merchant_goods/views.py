@@ -73,18 +73,17 @@ class Delete(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
-            sql_check2 = 'select price ' \
+            sql_check2 = 'select goods_id ' \
                          'from mall.mergoods ' \
-                         'where mer_id = %s ' \
-                         'and goods_id = %s'
-            check2 = obj.get_one(sql_check2, [mer_id, goods_id,])
+                         'where mer_id = %s'
+            check2 = obj.get_one(sql_check2, [mer_id, ])
             print(check2)
 
             if check2 is not None:
-                sql_delete = 'delete ' \
-                             'from mall.mergoods ' \
-                             'where mer_id = %s ' \
-                             'and goods_id = %s'
+                sql_alter = 'update mergoods ' \
+                            'set price = %s, sales = %s, stock = %s ' \
+                            'where mer_id = %s ' \
+                            'and goods_id = %s'
                 obj.modify(sql_delete, [mer_id, goods_id])
                 obj.close()
                 resp = {
@@ -98,6 +97,46 @@ class Delete(APIView):
                 }
             return Response(resp)
 
+
+class Alter(APIView):
+    def post(self, request, *args, **kargs):
+        if request.method == 'POST':  # 要求使用POST请求方式
+            print("receive POST request at /alter")
+            data = json.loads(request.body)
+            mer_id = data.get('mer_id')
+            goods_id = data.get('goods_id')
+            price = data.get('price')
+            sales = data.get('sales')
+            stock = data.get('stock')
+            print(mer_id)
+            print(goods_id)
+            print(price)
+            print(sales)
+            print(stock)
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+            obj = SqlHelper()
+            sql_check1 = 'select name ' \
+                         'from mall.merchant ' \
+                         'where mer_id = %s '
+            check1 = obj.get_one(sql_check1, [mer_id,])
+            print(check1)
+
+            if check1 is not None:
+                sql_addgoods = 'insert into mall.mergoods(mer_id, goods_id, price, stock, sales) ' \
+                               'values(%s, %s, %s, %s, %s)'
+                obj.modify(sql_addgoods, [mer_id, goods_id, price, stock, sales])
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                }
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Fail'
+                }
+            return Response(resp)
 
 
 
