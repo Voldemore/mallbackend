@@ -44,3 +44,5 @@ class Orders(APIView):
                     'msg': "the merchant id doesn't exist"
                 }
             return Response(resp)
+
+

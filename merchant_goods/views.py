@@ -80,8 +80,8 @@ class Delete(APIView):
             print(check2)
 
             if check2 is not None:
-                sql_delete = 'delete ' \
-                             'from mall.mergoods ' \
+                sql_delete = 'update mall.mergoods ' \
+                             'set state = 1 ' \
                              'where mer_id = %s ' \
                              'and goods_id = %s'
                 obj.modify(sql_delete, [mer_id, goods_id])
