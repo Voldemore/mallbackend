@@ -16,7 +16,7 @@ from datetime import datetime
 
 
 # Create your views here.
-#购物车查询
+# 购物车查询
 class cart_inquiry(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -51,7 +51,8 @@ class cart_inquiry(APIView):
                 }
             return Response(resp)
 
-#删除购物车
+
+# 删除购物车
 class carts_delete(APIView):
     def delete(self, request, *args, **kwargs):
         if request.method == 'DELETE':
@@ -69,7 +70,7 @@ class carts_delete(APIView):
             resp = {
                 'id': '0',
                 'msg': 'Success'
-                }
+            }
             return Response(resp)
             # else:
             #     resp = {
@@ -78,9 +79,10 @@ class carts_delete(APIView):
             #     }
             #     return Response(resp)
 
-#购物车生成订单
+
+# 购物车生成订单
 class Confirm_order(APIView):
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         print("received the post request at api/carts/comfirm_order/")
         data = json.loads(request.body)  # 涉及到购物车，库存，订单那张表
         print(data)
@@ -95,9 +97,9 @@ class Confirm_order(APIView):
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         try:
             sql_delete = "delete from mall.cart where goods_id = %s and mer_id = %s and user_id = %s"
-            cursor.execute(sql_delete,[goods_id, mer_id, user_id, ])
-            sql_update = "update mall.mergoods set stock = stock - %s where mer_id = %s and goods_id= %s"
-            cursor.execute(sql_update, [num, mer_id, goods_id, ])
+            cursor.execute(sql_delete, [goods_id, mer_id, user_id, ])
+            sql_update = "update mall.mergoods set stock = stock - %s,sales = sales+%s where mer_id = %s and goods_id= %s"
+            cursor.execute(sql_update, [num, num, mer_id, goods_id, ])
             sql_insert = "insert into mall.orderitem(goods_id, mer_id, user_id, num, amount, add_time, addr_id) " \
                          "values (%s,%s,%s,%s,%s,%s,%s)"
             add_time = datetime.now()
@@ -121,5 +123,3 @@ class Confirm_order(APIView):
                 "msg": "failure"
             }
         return Response(resp)
-
-

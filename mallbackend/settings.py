@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'merchant_goods',
     'merchant_orders',
     'query',
+    'administrator',
 
 ]
 REST_FRAMEWORK = {
