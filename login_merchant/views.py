@@ -188,7 +188,6 @@ class Info_Mod(APIView):
             # print(shopname)
 
             # 修改密码
-
             u = User.objects.get(username=mer_id)
             u.set_password(password)
             u.save()
@@ -199,15 +198,16 @@ class Info_Mod(APIView):
                           'set name = %s, mobile = %s, province = %s, city = %s, county = %s, address = %s, shopname = %s ' \
                           'where mer_id = %s'
             obj.modify(info_update, [name, mobile, province, city, county, address, shopname, mer_id, ])
-            # ss = 'select shopname ' \
-            #      'from mall.merchant ' \
-            #      'where mer_id = %s'
-            # ss0 = obj.get_one(ss, [mer_id, ])
+            sql_select = 'select * ' \
+                         'from mall.merchant ' \
+                         'where mer_id = %s'
+            result = obj.get_one(sql_select, [mer_id, ])
+            print(result)
 
             resp = {
                 'id': 0,
                 'msg': 'Success',
-                # 'payload': ss0
+                'payload': result
             }
             obj.close()
 
