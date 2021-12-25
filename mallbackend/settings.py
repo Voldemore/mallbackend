@@ -51,8 +51,6 @@ INSTALLED_APPS = [
     'merchant_orders',
     'query',
 
-
-
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

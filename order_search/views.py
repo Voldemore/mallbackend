@@ -28,6 +28,8 @@ class order_inquiry(APIView):
                     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
                     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
+                    sql_delete = "drop view if exists view_order"
+                    cursor.execute(sql_delete)
                     sql_create_view = "create view view_order(order_id,mer_id,goods_id,num,amount,state,add_time) " \
                                       "as " \
                                       "select order_id,mer_id,goods_id,num,amount,state,add_time " \
@@ -37,7 +39,7 @@ class order_inquiry(APIView):
                     sql_select = "select view_order.order_id,merchant_info.mer_name,goods_info.goods_name,goods_info.image,view_order.num,view_order.amount,view_order.state,view_order.add_time " \
                                  "from view_order,mall.view_merchant_info merchant_info,mall.view_goods_info goods_info " \
                                  "where view_order.goods_id = goods_info.goods_id " \
-                                 "and view_order.mer_id = merchant_info.mer_id "
+                                 "and view_order.mer_id = merchant_info.mer_id order by view_order.add_time desc "
                     cursor.execute(sql_select)
                     result_list = cursor.fetchall()
                     sql_drop_view = "drop view view_order"

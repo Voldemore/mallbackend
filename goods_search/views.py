@@ -322,10 +322,9 @@ class add_to_cart(APIView):
                               "where goods_id = %s and mer_id = %s and user_id = %s"
                 result1 = obj.get_one(sql_select1, [goods_id, mer_id, user_id, ])
                 if result1 is not None:
-                    sql_update = "update mall.cart " \
-                                  "set num = num+ %s " \
-                                  "where goods_id = %s and mer_id = %s and user_id = %s"
-                    result2 = obj.create(sql_update, [num, goods_id, mer_id, user_id, ])
+                    add_time = datetime.now()
+                    sql_update = "update mall.cart set num = %s,add_time = %s where goods_id = %s and mer_id = %s and user_id = %s"
+                    result2 = obj.create(sql_update, [num, add_time, goods_id, mer_id, user_id, ])
                 else:
                     sql_insert = "insert into mall.cart(goods_id, mer_id, user_id, num, add_time) " \
                                     "values (%s,%s,%s,%s,%s)"

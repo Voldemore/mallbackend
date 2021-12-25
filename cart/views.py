@@ -31,8 +31,7 @@ class cart_inquiry(APIView):
                 if user.is_staff == 0:
                     obj = SqlHelper()
                     sql_select = 'select goods_id,mer_id,num,add_time,pic,goods_name,mer_name,price ' \
-                                 'from mall.view_cart_users ' \
-                                 'where user_id = %s'
+                                 'from mall.view_cart_users where user_id = %s order by add_time desc '
                     result = obj.get_list(sql_select, [user_id, ])
                     obj.close()
                     resp = {
