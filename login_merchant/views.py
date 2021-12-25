@@ -174,7 +174,7 @@ class Info_Mod(APIView):
         if request.method == 'POST':
             print("receive POST request at /merchant/merinfo/modification/")
             data = json.loads(request.body)
-            email = data.get('email')
+            mer_id = data.get('mer_id')
             password = data.get('password')
             name = data.get('mername')
             mobile = data.get('mobile')
@@ -186,16 +186,16 @@ class Info_Mod(APIView):
 
             # 修改密码
 
-            u = User.objects.get(username=name)
-            u.set_password(password=password)
-            u.save()
+            # u = User.objects.get(username=name)
+            # u.set_password(password=password)
+            # u.save()
 
             # 其他部分
             obj = SqlHelper()
-            info_update = 'update mall.merchant' \
-                          ' set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s, shopname=%s ' \
+            info_update = 'update mall.merchant ' \
+                          'set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s, shopname=%s ' \
                           'where mer_id = %s'
-            obj.modify(info_update, [name, mobile, province, city, county, address, shopname, email, ])
+            obj.modify(info_update, [mer_id, name, mobile, province, city, county, address, shopname, ])
             resp = {
                 'id': 0,
                 'msg': 'Success',
