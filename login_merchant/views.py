@@ -195,7 +195,7 @@ class Info_Mod(APIView):
             info_update = 'update mall.merchant' \
                           ' set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s, shopname=%s ' \
                           'where mer_id = %s'
-            obj.modify(info_update, [name, mobile, province, city, county, address, shopname,email, ])
+            obj.modify(info_update, [name, mobile, province, city, county, address, shopname, email, ])
             resp = {
                 'id': 0,
                 'msg': 'Success',
