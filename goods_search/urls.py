@@ -8,3 +8,4 @@ urlpatterns = [
     path(r'comments/', views.Goods_comments.as_view()),
     path(r'addtocart/',views.add_to_cart.as_view())
 ]
+

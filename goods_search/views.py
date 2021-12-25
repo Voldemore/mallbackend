@@ -10,8 +10,9 @@ from django.db import connection
 import json
 import pymysql
 from SQL_connection.sqlhelper import SqlHelper
-#import datetime from datetime
 from datetime import datetime
+
+
 class GoodsSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
@@ -19,7 +20,7 @@ class GoodsSearch(APIView):
             data = request.GET
             variety = data.get('keywords')
             order = data.get('order')
-            direction = data.get('direction')       #默认升序
+            direction = data.get('direction')  # 默认升序
             print(variety)
             print(order)
             print(direction)
@@ -27,9 +28,9 @@ class GoodsSearch(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
-            if order=="价格":
+            if order == "价格":
 
-                if direction=="升序":
+                if direction == "升序":
                     obj = SqlHelper()
                     sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
@@ -103,6 +104,7 @@ class GoodsSearch(APIView):
                         }
                     return Response(resp)
 
+
 # =========================================================================================================================================
 # =========================================================================================================================================
 # =========================================================================================================================================
@@ -114,7 +116,7 @@ class MerchantSearch(APIView):
             data = request.GET
             mer_id = data.get('seller')
             order = data.get('order')
-            direction = data.get('direction')       #默认升序
+            direction = data.get('direction')  # 默认升序
             print(mer_id)
             print(order)
             print(direction)
@@ -122,9 +124,9 @@ class MerchantSearch(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
-            if order=="价格":
+            if order == "价格":
 
-                if direction=="升序":
+                if direction == "升序":
                     obj = SqlHelper()
                     sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
@@ -197,6 +199,7 @@ class MerchantSearch(APIView):
                         }
                     return Response(resp)
 
+
 # class GoodsSearch(APIView):
 #     def get(self, request, *args, **kwargs):
 #         if request.method == 'GET':
@@ -233,12 +236,13 @@ class Test(APIView):
     def get(self, request, *args, **kwargs):
         return Response("困！")
 
+
 # =========================================================================================================================================
 # =========================================================================================================================================
 # =========================================================================================================================================
-#查询商品的详情
+# 查询商品的详情
 class Goods_detail(APIView):
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.method == 'GET':
             print("receive GET request at /order_details")
             data = request.GET  # 处理请求
@@ -263,13 +267,12 @@ class Goods_detail(APIView):
                     'msg': 'goods not found'
                 }
             obj.close()
-            print("detail")
             return Response(resp)
 
 
-#查找一个商品所有的评论
+# 查找一个商品所有的评论
 class Goods_comments(APIView):
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.method == 'GET':
             print("receive GET request at /order_details")
             data = request.GET  # 处理请求
@@ -293,11 +296,12 @@ class Goods_comments(APIView):
                     'msg': 'goods not found'
                 }
             obj.close()
-            print("comments")
             return Response(resp)
 
+
+# 商品添加购物车 此时需要判断商品是否在购物车中只需要增加数量
 class add_to_cart(APIView):
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             print("receive POST request at /goods_detail/addtocart/")
             data = json.loads(request.body)
@@ -310,13 +314,22 @@ class add_to_cart(APIView):
 
             sql_select = "select stock from mall.mergoods where mer_id = %s and goods_id= %s"
 
-            result = obj.get_one(sql_select, [mer_id,goods_id, ])
+            result = obj.get_one(sql_select, [mer_id, goods_id, ])
             stock = result['stock']
             if stock > 0:
-                sql_insert = "insert into mall.cart(goods_id, mer_id, user_id, num, add_time) " \
-                             "values (%s,%s,%s,%s,%s)"
-
-                obj.modify(sql_insert, [goods_id, mer_id, user_id, num, add_time, ])
+                sql_select1 = "select goods_id, mer_id, user_id, num, add_time " \
+                              "from mall.cart " \
+                              "where goods_id = %s and mer_id = %s and user_id = %s"
+                result1 = obj.get_one(sql_select1, [goods_id, mer_id, user_id, ])
+                if result1 is not None:
+                    sql_update = "update mall.cart " \
+                                  "set num = num+ %s " \
+                                  "where goods_id = %s and mer_id = %s and user_id = %s"
+                    result2 = obj.create(sql_update, [num, goods_id, mer_id, user_id, ])
+                else:
+                    sql_insert = "insert into mall.cart(goods_id, mer_id, user_id, num, add_time) " \
+                                    "values (%s,%s,%s,%s,%s)"
+                    obj.modify(sql_insert, [goods_id, mer_id, user_id, num, add_time, ])
                 obj.close()
                 resp = {
                     "id": 0,
