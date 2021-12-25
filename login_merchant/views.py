@@ -29,7 +29,7 @@ class Register(APIView):
             # handle the request
             data = json.loads(request.body)
             email = data.get('email')
-            name = data.get('name')
+            name = data.get('mername')
             shopname = data.get('shopname')
             password = data.get('password')
             mobile = data.get('mobile')
@@ -66,7 +66,7 @@ class Login(APIView):
             print("receive POST request at /merchant/login")
             data = json.loads(request.body)
             print(data)
-            email = data.get('username')  # actually email
+            email = data.get('mername')  # actually email
             password = data.get('password')
             print(email)
             print(password)

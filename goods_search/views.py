@@ -112,7 +112,7 @@ class GoodsSearch(APIView):
 class MerchantSearch(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
-            print("receive GET request at /goods_search/goods_search")
+            print("receive GET request at /goods_search/merchant_search")
             data = request.GET
             mer_id = data.get('seller')
             order = data.get('order')
