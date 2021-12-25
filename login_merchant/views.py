@@ -139,6 +139,8 @@ class Merchant_Info(APIView):
             data = request.GET  # 处理请求
             mer_id = data.get('email')
             print(mer_id)
+            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             user = User.objects.filter(username=mer_id)
             if user is not None:
                 user = User.objects.get(username=mer_id)
@@ -183,22 +185,29 @@ class Info_Mod(APIView):
             county = data.get('county')
             address = data.get('address')
             shopname = data.get('shopname')
+            # print(shopname)
 
             # 修改密码
 
-            # u = User.objects.get(username=name)
-            # u.set_password(password=password)
-            # u.save()
+            u = User.objects.get(username=mer_id)
+            u.set_password(password)
+            u.save()
 
             # 其他部分
             obj = SqlHelper()
             info_update = 'update mall.merchant ' \
                           'set name=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s, shopname=%s ' \
                           'where mer_id = %s'
-            obj.modify(info_update, [mer_id, name, mobile, province, city, county, address, shopname, ])
+            obj.modify(info_update, [name, mobile, province, city, county, address, shopname, mer_id, ])
+            # ss = 'select shopname ' \
+            #      'from mall.merchant ' \
+            #      'where mer_id = %s'
+            # ss0 = obj.get_one(ss, [mer_id, ])
+
             resp = {
                 'id': 0,
                 'msg': 'Success',
+                # 'payload': ss0
             }
             obj.close()
 
