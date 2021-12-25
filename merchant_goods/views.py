@@ -73,17 +73,17 @@ class Delete(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
-            sql_check2 = 'select goods_id ' \
-                         'from mall.mergoods ' \
-                         'where mer_id = %s'
+            sql_check2 = 'select name ' \
+                         'from mall.merchant ' \
+                         'where mer_id = %s '
             check2 = obj.get_one(sql_check2, [mer_id, ])
             print(check2)
 
             if check2 is not None:
-                sql_alter = 'update mergoods ' \
-                            'set price = %s, sales = %s, stock = %s ' \
-                            'where mer_id = %s ' \
-                            'and goods_id = %s'
+                sql_delete = 'delete ' \
+                             'from mall.mergoods ' \
+                             'where mer_id = %s ' \
+                             'and goods_id = %s'
                 obj.modify(sql_delete, [mer_id, goods_id])
                 obj.close()
                 resp = {
@@ -116,16 +116,18 @@ class Alter(APIView):
             conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
             cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
             obj = SqlHelper()
-            sql_check1 = 'select name ' \
-                         'from mall.merchant ' \
-                         'where mer_id = %s '
-            check1 = obj.get_one(sql_check1, [mer_id,])
-            print(check1)
+            sql_check3 = 'select goods_id ' \
+                         'from mall.mergoods ' \
+                         'where mer_id = %s'
+            check3 = obj.get_one(sql_check3, [mer_id,])
+            print(check3)
 
-            if check1 is not None:
-                sql_addgoods = 'insert into mall.mergoods(mer_id, goods_id, price, stock, sales) ' \
-                               'values(%s, %s, %s, %s, %s)'
-                obj.modify(sql_addgoods, [mer_id, goods_id, price, stock, sales])
+            if check3 is not None:
+                sql_alter = 'update mall.mergoods ' \
+                            'set price = %s, sales = %s, stock = %s ' \
+                            'where mer_id = %s ' \
+                            'and goods_id = %s'
+                obj.modify(sql_alter, [price, sales, stock, mer_id, goods_id, ])
                 obj.close()
                 resp = {
                     'id': 0,
