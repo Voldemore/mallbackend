@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 import pymysql
 from django.contrib.auth.models import User
@@ -43,4 +44,25 @@ class Orders(APIView):
                     'id': -1,
                     'msg': "the merchant id doesn't exist"
                 }
+            return Response(resp)
+
+
+class OrderDetail(APIView):
+    def get(self, request, *args, **kargs):
+        if request.method == 'GET':  # 要求使用GET请求方式
+            print("receive GET request at /merorder/orderdetail")
+            data = request.GET
+            obj = SqlHelper()
+            order_id = data.get('order_id')
+            sql_select2 = 'select add_time, user_name, mobile, address ' \
+                          'from view_merorder_detail ' \
+                          'where order_id = %s'
+            result = obj.get_one(sql_select2, [order_id, ])
+            obj.close()
+            resp = {
+                'id': 0,
+                'msg': 'success',
+                'payload': result
+            }
+
             return Response(resp)
