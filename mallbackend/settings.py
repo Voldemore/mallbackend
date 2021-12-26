@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'cart',
     'merchant_goods',
     'merchant_orders',
-    'query',
     'administrator',
 
 ]

@@ -27,6 +27,5 @@ urlpatterns = [
     path(r'api/mergoods/', include('merchant_goods.urls')),
     path(r'api/merorder/', include('merchant_orders.urls')),
     path(r'api/cart/', include('cart.urls')),
-    path(r'api/query/', include('query.urls')),
     path(r'api/admin/', include('administrator.urls'))
 ]
