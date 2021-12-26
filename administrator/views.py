@@ -42,6 +42,7 @@ class Login(APIView):
                 return Response(resp)
 
 
+# 搜索商品
 class GoodsSearchKeywords(APIView):
     def get(self,request, *args, **kwargs):
         if request.method == 'GET':
@@ -73,6 +74,7 @@ class GoodsSearchKeywords(APIView):
             return Response(resp)
 
 
+# 搜索商家
 class MerchantSearchKeywords(APIView):
     def get(self,request, *args, **kwargs):
         if request.method == 'GET':
@@ -99,7 +101,71 @@ class MerchantSearchKeywords(APIView):
             else:
                 resp = {
                     'id': -1,
-                    'msg': 'Goods can not found',
+                    'msg': 'Goods cannot found',
+                    'payload': []
+                }
+            return Response(resp)
+
+
+# 搜索用户订单
+class UserOrderSearch(APIView):
+    def get(self,request, *args, **kwargs):
+        if request.method == 'GET':
+            print("received the GET request at api/admin/user_order_search/")
+            data = request.GET
+            user_id = data.get('keywords')
+            print(user_id)
+            obj = SqlHelper()
+            sql_select = 'select user_id, user_name, order_num, sum_cost, max_cost, min_cost ' \
+                         'from mall.view_admin_user_order ' \
+                         'where user_id = %s'
+            result1 = obj.get_list(sql_select, [user_id, ])
+            result2 = obj.get_one(sql_select, [user_id, ])
+            print(result2)
+            if result2 is not None:
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods cannot found',
+                    'payload': []
+                }
+            return Response(resp)
+
+
+# 搜索用户商品
+class UserGoodsSearch(APIView):
+    def get(self,request, *args, **kwargs):
+        if request.method == 'GET':
+            print("received the GET request at api/admin/user_goods_search/")
+            data = request.GET
+            user_id = data.get('keywords')
+            print(user_id)
+            obj = SqlHelper()
+            sql_select = 'select user_id, goods_id, goods_name, goods_price, goods_num, goods_cost ' \
+                         'from mall.view_admin_user_goods ' \
+                         'where user_id = %s'
+            result1 = obj.get_list(sql_select, [user_id, ])
+            result2 = obj.get_one(sql_select, [user_id, ])
+            print(result2)
+            if result2 is not None:
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods cannot found',
                     'payload': []
                 }
             return Response(resp)
