@@ -52,7 +52,7 @@ class GoodsSearchKeywords(APIView):
             variety = data.get('keywords')
             print(variety)
             obj = SqlHelper()
-            sql_select = 'select goods_id,des,maker,image,price,sales,stock ' \
+            sql_select = 'select goods_id,des,maker,image,price,sales,stock,comments ' \
                          'from mall.view_admin_goods_search_keywords ' \
                          'where variety = %s'
             result1 = obj.get_list(sql_select, [variety, ])
