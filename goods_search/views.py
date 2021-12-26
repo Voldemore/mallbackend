@@ -25,9 +25,6 @@ class GoodsSearch(APIView):
             print(order)
             print(direction)
 
-            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
-            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-
             if order == "价格":
 
                 if direction == "升序":
@@ -120,9 +117,6 @@ class MerchantSearch(APIView):
             print(mer_id)
             print(order)
             print(direction)
-
-            conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
-            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
             if order == "价格":
 

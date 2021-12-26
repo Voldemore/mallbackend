@@ -198,7 +198,7 @@ class Info_Mod(APIView):
                           'set name = %s, mobile = %s, province = %s, city = %s, county = %s, address = %s, shopname = %s ' \
                           'where mer_id = %s'
             obj.modify(info_update, [name, mobile, province, city, county, address, shopname, mer_id, ])
-            sql_select = 'select * ' \
+            sql_select = 'select mer_id,shopname,name,mobile,province,city,county,address  ' \
                          'from mall.merchant ' \
                          'where mer_id = %s'
             result = obj.get_one(sql_select, [mer_id, ])

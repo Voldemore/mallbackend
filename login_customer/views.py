@@ -45,7 +45,7 @@ class Register(APIView):
                 print(email)
                 operation_insert = 'insert into mall.users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
                 obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
-                operation_select = "select * from mall.users where user_id=%s"
+                operation_select = "select username, mobile, province, city, county, address from mall.users where user_id=%s"
                 result = obj.get_one(operation_select, [email, ])
                 print(result)
                 obj.close()
@@ -217,7 +217,7 @@ class Info_Mod(APIView):
                           'set username=%s, mobile=%s, province=%s, city=%s, county=%s, address=%s ' \
                           'where user_id = %s'
             obj.modify(info_update, [username, mobile, province, city, county, address, user_id, ])
-            sql_select = "select * from mall.users where user_id = %s"
+            sql_select = "select username, mobile, province, city, county, address from mall.users where user_id = %s"
             result = obj.get_one(sql_select, [user_id, ])
             print(result)
             resp = {
