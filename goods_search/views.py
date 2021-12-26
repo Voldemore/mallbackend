@@ -29,7 +29,7 @@ class GoodsSearch(APIView):
 
                 if direction == "升序":
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where variety = %s ' \
                                   'order by price'
@@ -54,7 +54,7 @@ class GoodsSearch(APIView):
 
                 elif direction == "降序":
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where variety = %s ' \
                                   'order by price desc'
@@ -79,7 +79,7 @@ class GoodsSearch(APIView):
 
                 else:
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where variety = %s '
                     result1 = obj.get_list(sql_select1, [variety, ])
@@ -108,7 +108,7 @@ class GoodsSearch(APIView):
                 if direction == "升序" :
 
                     obj = SqlHelper()
-                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
                                  'where variety = %s ' \
                                  'order by sales'
@@ -134,7 +134,7 @@ class GoodsSearch(APIView):
                 elif direction == "降序" :
 
                     obj = SqlHelper()
-                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
                                  'where variety = %s ' \
                                  'order by sales desc'
@@ -179,7 +179,7 @@ class MerchantSearch(APIView):
 
                 if direction == "升序":
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where mer_id = %s ' \
                                   'order by price'
@@ -203,7 +203,7 @@ class MerchantSearch(APIView):
 
                 elif direction == "降序":
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where mer_id = %s ' \
                                   'order by price desc'
@@ -228,7 +228,7 @@ class MerchantSearch(APIView):
 
                 else:
                     obj = SqlHelper()
-                    sql_select1 = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
                                   'where mer_id = %s '
                     result1 = obj.get_list(sql_select1, [mer_id, ])
@@ -257,7 +257,7 @@ class MerchantSearch(APIView):
                 if direction == "升序" :
 
                     obj = SqlHelper()
-                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
                                  'where mer_id = %s ' \
                                  'order by sales'
@@ -283,7 +283,7 @@ class MerchantSearch(APIView):
                 elif direction == "降序" :
 
                     obj = SqlHelper()
-                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                    sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
                                  'where mer_id = %s ' \
                                  'order by sales desc'
