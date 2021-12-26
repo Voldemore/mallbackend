@@ -341,3 +341,27 @@ class add_to_cart(APIView):
                     'msg': 'Goods not found'
                 }
                 return Response(resp)
+
+class customer_home(APIView):
+    def get(self,request, *args,**kwargs):
+        if request.method == 'GET':
+            print("receive GET request at api/goods_search/inquiry/")
+            data = request.GET
+            number = int(data.get('number'))
+            sql_select = "select mer_id,shopname,goods_id,goods_name,des,maker,variety,image,price,stock from mall.view_customer_home"
+            obj = SqlHelper()
+            result = obj.get_many(sql_select, [], number)
+            obj.close()
+            if result is not None:
+                resp = {
+                    'id': 0,
+                    'msg': "success",
+                    'payload': result
+                }
+                return Response(resp)
+            else:
+                resp={
+                    'id': -1,
+                    'msg':"goods not found"
+                }
+                return Response(resp)

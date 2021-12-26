@@ -12,6 +12,11 @@ class SqlHelper(object):
         result_list = self.cursor.fetchall()
         return result_list
 
+    def get_many(self,sql,args,number):
+        self.cursor.execute(sql,args)
+        result_list = self.cursor.fetchmany(number)
+        return result_list
+
     # 获取单个
     def get_one(self, sql, args):
         self.cursor.execute(sql, args)
