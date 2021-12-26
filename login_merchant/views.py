@@ -48,7 +48,6 @@ class Register(APIView):
                 obj = SqlHelper()
                 operation_insert = 'insert into mall.merchant(mer_id,name,mobile,province,city,county,address,shopname) ' \
                                    'values(%s,%s,%s,%s,%s,%s,%s,%s)'
-
                 obj.modify(operation_insert, [email, name, mobile, province, city, county, address, shopname, ])
                 resp = {
                     'id': 0,

@@ -43,8 +43,10 @@ class Register(APIView):
                 obj = SqlHelper()
                 print("1")
                 print(email)
-                operation_insert = 'insert into mall.users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
-                obj.modify(operation_insert, [email, username, mobile, province, city, county, address, ])
+                operation_insert1 = 'insert into mall.users(user_id,username,mobile,province,city,county,address) values(%s,%s,%s,%s,%s,%s,%s)'
+                obj.modify(operation_insert1, [email, username, mobile, province, city, county, address, ])
+                operation_insert2 = "insert into mall.address(user_id, name, mobile, province, city, county, address) values (%s,%s,%s,%s,%s,%s,%s)"
+                obj.modify(operation_insert2,[email, username, mobile, province, city, county, address,])
                 operation_select = "select username, mobile, province, city, county, address from mall.users where user_id=%s"
                 result = obj.get_one(operation_select, [email, ])
                 print(result)
