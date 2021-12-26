@@ -34,6 +34,7 @@ class cart_inquiry(APIView):
                                  'from mall.view_cart_users where user_id = %s order by add_time desc '
                     result = obj.get_list(sql_select, [user_id, ])
                     obj.close()
+                    print(result)
                     resp = {
                         'id': 0,
                         'msg': 'success',
