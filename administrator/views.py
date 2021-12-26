@@ -50,7 +50,7 @@ class GoodsSearchKeywords(APIView):
             print("received the GET request at api/admin/goods_search/")
             data = request.GET
             variety = data.get('keywords')
-            print("keywords")
+            print(variety)
             obj = SqlHelper()
             sql_select = 'select goods_id,des,maker,image,price,sales,stock ' \
                          'from mall.view_admin_goods_search_keywords ' \

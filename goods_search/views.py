@@ -101,6 +101,63 @@ class GoodsSearch(APIView):
                         }
                     return Response(resp)
 
+# #
+
+            elif order == "销量" :
+
+                if direction == "升序" :
+
+                    obj = SqlHelper()
+                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                 'from mall.view_goods_search_sales ' \
+                                 'where variety = %s ' \
+                                 'order by sales'
+                    result1 = obj.get_list(sql_select, [variety, ])
+                    result2 = obj.get_one(sql_select, [variety, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'Goods can not found',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+                elif direction == "降序" :
+
+                    obj = SqlHelper()
+                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                 'from mall.view_goods_search_sales ' \
+                                 'where variety = %s ' \
+                                 'order by sales desc'
+                    result1 = obj.get_list(sql_select, [variety, ])
+                    result2 = obj.get_one(sql_select, [variety, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'Goods can not found',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+
 
 # =========================================================================================================================================
 # =========================================================================================================================================
