@@ -168,10 +168,10 @@ class MerchantSearch(APIView):
         if request.method == 'GET':
             print("receive GET request at /goods_search/merchant_search")
             data = request.GET
-            mer_id = data.get('seller')
+            shopname = data.get('seller')
             order = data.get('order')
             direction = data.get('direction')  # 默认升序
-            print(mer_id)
+            print(shopname)
             print(order)
             print(direction)
 
@@ -181,10 +181,10 @@ class MerchantSearch(APIView):
                     obj = SqlHelper()
                     sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
-                                  'where mer_id = %s ' \
+                                  'where shopname = %s ' \
                                   'order by price'
-                    result1 = obj.get_list(sql_select1, [mer_id, ])
-                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    result1 = obj.get_list(sql_select1, [shopname, ])
+                    result2 = obj.get_one(sql_select1, [shopname, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
@@ -205,10 +205,10 @@ class MerchantSearch(APIView):
                     obj = SqlHelper()
                     sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
-                                  'where mer_id = %s ' \
+                                  'where shopname = %s ' \
                                   'order by price desc'
-                    result1 = obj.get_list(sql_select1, [mer_id, ])
-                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                    result1 = obj.get_list(sql_select1, [shopname, ])
+                    result2 = obj.get_one(sql_select1, [shopname, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
@@ -230,9 +230,9 @@ class MerchantSearch(APIView):
                     obj = SqlHelper()
                     sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
-                                  'where mer_id = %s '
-                    result1 = obj.get_list(sql_select1, [mer_id, ])
-                    result2 = obj.get_one(sql_select1, [mer_id, ])
+                                  'where shopname = %s '
+                    result1 = obj.get_list(sql_select1, [shopname, ])
+                    result2 = obj.get_one(sql_select1, [shopname, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
@@ -259,10 +259,10 @@ class MerchantSearch(APIView):
                     obj = SqlHelper()
                     sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
-                                 'where mer_id = %s ' \
+                                 'where shopname = %s ' \
                                  'order by sales'
-                    result1 = obj.get_list(sql_select, [mer_id, ])
-                    result2 = obj.get_one(sql_select, [mer_id, ])
+                    result1 = obj.get_list(sql_select, [shopname, ])
+                    result2 = obj.get_one(sql_select, [shopname, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
@@ -285,10 +285,10 @@ class MerchantSearch(APIView):
                     obj = SqlHelper()
                     sql_select = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                  'from mall.view_goods_search_sales ' \
-                                 'where mer_id = %s ' \
+                                 'where shopname = %s ' \
                                  'order by sales desc'
-                    result1 = obj.get_list(sql_select, [mer_id, ])
-                    result2 = obj.get_one(sql_select, [mer_id, ])
+                    result1 = obj.get_list(sql_select, [shopname, ])
+                    result2 = obj.get_one(sql_select, [shopname, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
