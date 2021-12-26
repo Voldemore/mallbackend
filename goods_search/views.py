@@ -250,7 +250,61 @@ class MerchantSearch(APIView):
                         }
                     return Response(resp)
 
+# #
 
+            elif order == "销量" :
+
+                if direction == "升序" :
+
+                    obj = SqlHelper()
+                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                 'from mall.view_goods_search_sales ' \
+                                 'where mer_id = %s ' \
+                                 'order by sales'
+                    result1 = obj.get_list(sql_select, [mer_id, ])
+                    result2 = obj.get_one(sql_select, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'Goods can not found',
+                            'payload': []
+                        }
+                    return Response(resp)
+
+                elif direction == "降序" :
+
+                    obj = SqlHelper()
+                    sql_select = 'select goods_id,goods_name,des,maker,variety,image,price,stock ' \
+                                 'from mall.view_goods_search_sales ' \
+                                 'where mer_id = %s ' \
+                                 'order by sales desc'
+                    result1 = obj.get_list(sql_select, [mer_id, ])
+                    result2 = obj.get_one(sql_select, [mer_id, ])
+                    print(result2)
+                    if result2 is not None:
+                        obj.close()
+                        resp = {
+                            'id': 0,
+                            'msg': 'Success',
+                            'payload': result1
+                        }
+
+                    else:
+                        resp = {
+                            'id': -1,
+                            'msg': 'Goods can not found',
+                            'payload': []
+                        }
+                    return Response(resp)
 # class GoodsSearch(APIView):
 #     def get(self, request, *args, **kwargs):
 #         if request.method == 'GET':
