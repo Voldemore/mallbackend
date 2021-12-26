@@ -52,12 +52,13 @@ class GoodsSearchKeywords(APIView):
             variety = data.get('keywords')
             print(variety)
             obj = SqlHelper()
-            sql_select = 'select goods_id,des,maker,image,price,sales,stock,comments ' \
+            sql_select = 'select goods_id,des,maker,image,price,sales,stock ,comments ' \
                          'from mall.view_admin_goods_search_keywords ' \
                          'where variety = %s'
             result1 = obj.get_list(sql_select, [variety, ])
             result2 = obj.get_one(sql_select, [variety, ])
             print(result2)
+            print(result1)
             obj.close()
             if result2 is not None:
                 resp = {
@@ -82,7 +83,7 @@ class MerchantSearchKeywords(APIView):
             print("received the GET request at api/admin/mer_search/")
             data = request.GET
             mer_id = data.get('keywords')
-            print("keywords")
+            print(mer_id)
             obj = SqlHelper()
             sql_select = 'select mer_id, mer_name, goods_id, goods_name, goods_type, ' \
                          'goods_price, goods_sales, goods_stock, goods_income ' \
@@ -156,6 +157,7 @@ class UserGoodsSearch(APIView):
             result1 = obj.get_list(sql_select, [user_id, ])
             result2 = obj.get_one(sql_select, [user_id, ])
             print(result2)
+            print(result1)
             if result2 is not None:
                 obj.close()
                 resp = {
