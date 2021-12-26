@@ -20,12 +20,13 @@ class Login(APIView):
             data = json.loads(request.body)
             admin_id = data.get('admin_email')
             password = data.get('password')
-            sql_select = "select admin_id from mall.administrator where admin_id = %s and password = %s"
+            sql_select = "select name from mall.administrator where admin_id = %s and password = %s"
             obj = SqlHelper()
             result0 = obj.get_one(sql_select, [admin_id, password, ])
+            print(result0)
             if result0 is not None:
                 result = {}
-                result['admin_name'] = result0['admin_name']
+                result['admin_name'] = result0['name']
                 obj.close()
                 resp = {
                     'id': 0,
