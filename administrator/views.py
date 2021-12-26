@@ -42,6 +42,69 @@ class Login(APIView):
                 return Response(resp)
 
 
+class GoodsSearchKeywords(APIView):
+    def get(self,request, *args, **kwargs):
+        if request.method == 'GET':
+            print("received the GET request at api/admin/goods_search/")
+            data = request.GET
+            variety = data.get('keywords')
+            print("keywords")
+            obj = SqlHelper()
+            sql_select = 'select goods_id,des,maker,image,price,sales,stock ' \
+                         'from mall.view_admin_goods_search_keywords ' \
+                         'where variety = %s'
+            result1 = obj.get_list(sql_select, [variety, ])
+            result2 = obj.get_one(sql_select, [variety, ])
+            print(result2)
+            if result2 is not None:
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods can not found',
+                    'payload': []
+                }
+            return Response(resp)
+
+
+class MerchantSearchKeywords(APIView):
+    def get(self,request, *args, **kwargs):
+        if request.method == 'GET':
+            print("received the GET request at api/admin/mer_search/")
+            data = request.GET
+            mer_id = data.get('keywords')
+            print("keywords")
+            obj = SqlHelper()
+            sql_select = 'select mer_id, mer_name, goods_id, goods_name, goods_type, ' \
+                         'goods_price, goods_sales, goods_stock, goods_income ' \
+                         'from mall.view_admin_merchant ' \
+                         'where mer_id = %s'
+            result1 = obj.get_list(sql_select, [mer_id, ])
+            result2 = obj.get_one(sql_select, [mer_id, ])
+            print(result2)
+            if result2 is not None:
+                obj.close()
+                resp = {
+                    'id': 0,
+                    'msg': 'Success',
+                    'payload': result1
+                }
+
+            else:
+                resp = {
+                    'id': -1,
+                    'msg': 'Goods can not found',
+                    'payload': []
+                }
+            return Response(resp)
+
+
 #搜索所有的商家
 class all_merchants(APIView):
     def get(self,request, *args, **kwargs):
