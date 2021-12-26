@@ -28,6 +28,7 @@ class Register(APIView):
             print("receive POST request at /merchant/register")
             # handle the request
             data = json.loads(request.body)
+            print(data)
             email = data.get('email')
             name = data.get('mername')
             shopname = data.get('shopname')
@@ -37,7 +38,7 @@ class Register(APIView):
             city = data.get('city')
             county = data.get('county')
             address = data.get('address')
-
+            print(email)
             if User.objects.filter(username=email).exists():
                 resp = {
                     'id': -1,

@@ -29,12 +29,14 @@ class GoodsSearch(APIView):
 
                 if direction == "升序":
                     obj = SqlHelper()
+                    str_key = 'variety like' + '%%'+variety+"%%"
+                    print(str_key)
                     sql_select1 = 'select mer_id,goods_id,goods_name,des,maker,variety,image,price,stock ' \
                                   'from mall.view_goods_search ' \
-                                  'where variety = %s ' \
+                                  'where %s ' \
                                   'order by price'
-                    result1 = obj.get_list(sql_select1, [variety, ])
-                    result2 = obj.get_one(sql_select1, [variety, ])
+                    result1 = obj.get_list(sql_select1, [str_key, ])
+                    result2 = obj.get_one(sql_select1, [str_key, ])
                     print(result2)
                     if result2 is not None:
                         obj.close()
@@ -47,7 +49,7 @@ class GoodsSearch(APIView):
                     else:
                         resp = {
                             'id': -1,
-                            'msg': 'Goods can not found',
+                            'msg': 'Goods not found',
                             'payload': []
                         }
                     return Response(resp)
@@ -359,7 +361,8 @@ class Goods_detail(APIView):
                          "where goods_id = %s and mer_id = %s"
             obj = SqlHelper()
             result = obj.get_one(sql_select, [good_id, mer_id, ])
-            if result:
+            print(result)
+            if result is not None:
                 resp = {
                     'id': '0',
                     'msg': 'success',

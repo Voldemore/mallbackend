@@ -99,31 +99,41 @@ class Confirm_order(APIView):
         flag = 0  # 标志变量，如果生成订单成功则为0，若失败，则为1
         conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='2021mall', db='mall')
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        try:
-            sql_delete = "delete from mall.cart where goods_id = %s and mer_id = %s and user_id = %s"
-            cursor.execute(sql_delete, [goods_id, mer_id, user_id, ])
-            sql_update = "update mall.mergoods set stock = stock - %s,sales = sales+%s where mer_id = %s and goods_id= %s"
-            cursor.execute(sql_update, [num, num, mer_id, goods_id, ])
-            sql_insert = "insert into mall.orderitem(goods_id, mer_id, user_id, num, amount, add_time, addr_id) " \
-                         "values (%s,%s,%s,%s,%s,%s,%s)"
-            add_time = datetime.now()
-            cursor.execute(sql_insert, [goods_id, mer_id, user_id, num, amount, add_time, addr_id, ])
-            conn.commit()  # 事务提交
-        except Exception as e:
-            conn.rollback()  # 事务回滚
-            flag = 1
-        finally:
-            # 5.释放资源
-            cursor.close()
-            conn.close()
-        if flag == 0:
+        sql_select = "select num from mall.cart where goods_id = %s and mer_id = %s and user_id = %s"
+        cursor.execute(sql_select, [goods_id, mer_id, user_id,])
+        result = cursor.fetchone()
+        if result is not None:
+            try:
+                sql_delete = "delete from mall.cart where goods_id = %s and mer_id = %s and user_id = %s"
+                cursor.execute(sql_delete, [goods_id, mer_id, user_id, ])
+                sql_update = "update mall.mergoods set stock = stock - %s,sales = sales+%s where mer_id = %s and goods_id= %s"
+                cursor.execute(sql_update, [num, num, mer_id, goods_id, ])
+                sql_insert = "insert into mall.orderitem(goods_id, mer_id, user_id, num, amount, add_time, addr_id) " \
+                             "values (%s,%s,%s,%s,%s,%s,%s)"
+                add_time = datetime.now()
+                cursor.execute(sql_insert, [goods_id, mer_id, user_id, num, amount, add_time, addr_id, ])
+                conn.commit()  # 事务提交
+            except Exception as e:
+                conn.rollback()  # 事务回滚
+                flag = 1
+            finally:
+                # 5.释放资源
+                cursor.close()
+                conn.close()
+            if flag == 0:
+                resp = {
+                    "id": 0,
+                    "msg": "Success"
+                }
+            if flag == 1:
+                resp = {
+                    "id": -1,
+                    "msg": "failure"
+                }
+            return Response(resp)
+        else:
             resp = {
-                "id": 0,
-                "msg": "Success"
+                'id': -2,
+                'msg': "cart not found"
             }
-        if flag == 1:
-            resp = {
-                "id": -1,
-                "msg": "failure"
-            }
-        return Response(resp)
+            return Response(resp)
