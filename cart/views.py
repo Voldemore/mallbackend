@@ -61,23 +61,27 @@ class carts_delete(APIView):
             user_id = data.get('user_id')
             goods_id = int(data.get('goods_id'))
             mer_id = data.get('mer_id')
-            sql_delete = "delete from mall.cart " \
-                         "where goods_id =%s and mer_id = %s and user_id = %s"
+            sql_select = "select goods_id from mall.cart where goods_id =%s and mer_id = %s and user_id = %s"
+
             obj = SqlHelper()
-            result = obj.create(sql_delete, [goods_id, mer_id, user_id, ])
-            obj.close()
-            print(result)
-            resp = {
-                'id': '0',
-                'msg': 'Success'
-            }
-            return Response(resp)
-            # else:
-            #     resp = {
-            #         'id': '-1',
-            #         'msg': 'failure'
-            #     }
-            #     return Response(resp)
+            result = obj.get_one(sql_select, [goods_id, mer_id, user_id, ])
+            if result is not None:
+                sql_delete = "delete from mall.cart " \
+                             "where goods_id =%s and mer_id = %s and user_id = %s"
+                result = obj.create(sql_delete, [goods_id, mer_id, user_id, ])
+                obj.close()
+                print(result)
+                resp = {
+                    'id': '0',
+                    'msg': 'Success'
+                }
+                return Response(resp)
+            else:
+                resp = {
+                    'id': '-1',
+                    'msg': 'failure'
+                }
+                return Response(resp)
 
 
 # 购物车生成订单

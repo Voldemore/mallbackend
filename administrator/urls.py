@@ -8,5 +8,5 @@ urlpatterns=[
     path(r'mer_search/',views.MerchantSearchKeywords.as_view()),
     path(r'user_order_search/',views.UserOrderSearch.as_view()),
     path(r'user_goods_search/',views.UserGoodsSearch.as_view()),
-
+    path(r'user_province_search/', views.user_province_search.as_view())
 ]

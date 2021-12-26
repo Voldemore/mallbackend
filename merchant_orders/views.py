@@ -55,7 +55,7 @@ class OrderDetail(APIView):
             obj = SqlHelper()
             order_id = data.get('order_id')
             sql_select2 = 'select add_time, user_name, mobile, address ' \
-                          'from view_merorder_detail ' \
+                          'from mall.view_merorder_detail ' \
                           'where order_id = %s'
             result = obj.get_one(sql_select2, [order_id, ])
             obj.close()

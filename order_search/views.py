@@ -64,7 +64,7 @@ class order_inquiry(APIView):
             return Response(resp)
 
 
-# 查看用户添加订单的信息
+# 顾客查看订单的详细信息
 class order_details(APIView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':  # 要求使用GET请求方式
@@ -110,7 +110,7 @@ class order_state(APIView):
             sql_select = 'select order_id from mall.orderitem where order_id = %s'
             obj = SqlHelper()
             result = obj.get_one(sql_select, [order_id, ])
-            if len(result) != 0:
+            if result is not None:
                 sql_update = "update mall.orderitem set state=1 where order_id = %s"
                 obj.modify(sql_update, [order_id, ])
                 obj.close()
@@ -136,7 +136,7 @@ class comments_release(APIView):
         sql_select = 'select order_id from mall.orderitem where order_id = %s'
         obj = SqlHelper()
         result = obj.get_one(sql_select, [order_id, ])
-        if len(result) != 0:
+        if result is not None:
             sql_update = "update mall.orderitem set comments=%s where order_id = %s"
             obj.modify(sql_update, [comments, order_id, ])
             obj.close()

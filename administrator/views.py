@@ -20,7 +20,7 @@ class Login(APIView):
             data = json.loads(request.body)
             admin_id = data.get('admin_email')
             password = data.get('password')
-            sql_select = "select * from mall.administrator where admin_id = %s and password = %s"
+            sql_select = "select admin_id from mall.administrator where admin_id = %s and password = %s"
             obj = SqlHelper()
             result0 = obj.get_one(sql_select, [admin_id, password, ])
             if result0 is not None:
@@ -42,7 +42,7 @@ class Login(APIView):
                 return Response(resp)
 
 
-# 搜索商品
+# 按照商品种类搜索商品
 class GoodsSearchKeywords(APIView):
     def get(self,request, *args, **kwargs):
         if request.method == 'GET':
@@ -57,8 +57,8 @@ class GoodsSearchKeywords(APIView):
             result1 = obj.get_list(sql_select, [variety, ])
             result2 = obj.get_one(sql_select, [variety, ])
             print(result2)
+            obj.close()
             if result2 is not None:
-                obj.close()
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -74,7 +74,7 @@ class GoodsSearchKeywords(APIView):
             return Response(resp)
 
 
-# 搜索商家
+# 按照商家名称搜索商家
 class MerchantSearchKeywords(APIView):
     def get(self,request, *args, **kwargs):
         if request.method == 'GET':
@@ -90,8 +90,9 @@ class MerchantSearchKeywords(APIView):
             result1 = obj.get_list(sql_select, [mer_id, ])
             result2 = obj.get_one(sql_select, [mer_id, ])
             print(result2)
+            obj.close()
             if result2 is not None:
-                obj.close()
+
                 resp = {
                     'id': 0,
                     'msg': 'Success',
@@ -187,4 +188,19 @@ class all_merchants(APIView):
                 'payload':result
             }
             return Response(resp)
+
+class user_province_search(APIView):
+    def get(self,request,*args,**kwargs):
+        if request.method == "GET":
+            data = request.GET
+            sql_select = "select province,user_num,order_num,avg_cost,max_cost,min_cost from mall.view_user_order_province"
+            obj = SqlHelper()
+            result = obj.get_list(sql_select,[ ])
+            resp = {
+                'id':0,
+                'msg':'success',
+                'payload':result
+            }
+            return Response(resp)
+
 
